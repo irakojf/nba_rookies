@@ -13,6 +13,10 @@
 from makeCSV import create
 
 def main(): 
+    csv()
+    
+def csv(): 
+    # creates a CVS for the following text files
     file_list = ['s0809.txt', 
              's0910.txt',
              's1011.txt',

@@ -71,14 +71,14 @@ def parse(file_name):
         
         ans = line.splitlines()
         for an in ans: 
-            if an.find( "%" )!= -1: 
+            if an.find( "%" )!= -1 or an.find( "percent" )!=-1 : 
                 responses.append( an )
     
     players = []
     for response in responses: 
         if response.find("SPLIT")!= -1: 
             players.append( response )
-        pattern = '[a-zA-Z]* [a-zA-Z]* [\, [a-zA-Z]*' 
+        pattern = '[a-zA-Z"\']* [. [\, [a-zA-Z]*' 
         match = re.search(pattern, response)
         re.match(pattern, response) 
                 
