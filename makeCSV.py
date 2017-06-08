@@ -16,18 +16,18 @@ from surveyParse import parse
 from surveyParse import headers
 
 def main(): 
-    create(sys.argv[1])
+    return 
     
     
 def create( survey_file ):
     key = headers( survey_file )
     data = parse( survey_file )
     
-    with open('output.csv', 'w') as csv_file: 
+    output = survey_file[:-4] + ".csv"
+    with open(output, 'w') as csv_file: 
         csv_app = csv.writer( csv_file )
         csv_app.writerow( key )
         csv_app.writerow( data )
     
-    
-
-main()
+if __name__ == '__main__':
+    create(sys.argv[1])
