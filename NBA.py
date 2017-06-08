@@ -12,9 +12,9 @@
 
 import pandas as pd
 import numpy as np
+import csv
 import matplotlib.pyplot as plt
 pd.set_option('max_columns', 50)
-from surveyParse import format
 
 def main(): 
     survey_files = ['s0809.txt', 
@@ -26,8 +26,8 @@ def main():
              's1415.txt',
              's1516.txt',
              's1617.txt']
-    format('s0809.txt')
-        
+
+
         
 
 main()
