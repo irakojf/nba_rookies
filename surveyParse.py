@@ -5,15 +5,18 @@ Created on Wed Jun  7 12:25:50 2017
 @author: irako
 
 surveyParse.py 
-Reads text files and parses for player names. 
+Reads survey.txt files and parses data into lists
 
 """
 import re
+import itertools
 
 def main(): 
     return
-    
+
 def read_all(): 
+    # executes all possible survey files into the parse(function) 
+    
     survey_files = ['s0809.txt', 
              's0910.txt',
              's1011.txt',
@@ -30,59 +33,66 @@ def read_all():
         global lines 
         lines = file.readlines()
         file.close() 
-        format()
+        parse(file_name)
 
-def format(file_name):
-    # reads the file 
+def headers(file_name): 
+    # accepts a survey file and returns an array containing the 
+    # survey questions 
+    
+    file = open( file_name, "r" )
+    global lines 
+    lines = file.readlines()
+    file.close() 
+    
+    headers = []
+    for line in lines:
+        line = line.rstrip( '\n' )
+        phrase = "Which rookie "
+        if line.find( phrase )!= -1: 
+            headers.append( line )
+    return headers
+
+
+def parse(file_name):
+    # accepts a survey file and returns an array of arrays 
+    # containing just the player responses only
 
     file = open( file_name, "r" )
     global lines 
     lines = file.readlines()
     file.close() 
     
-    
-    
-    # places the survey questions into an array called players
-    headers = []
-    results = []
+    responses = []
     for line in lines:
         line = line.rstrip( '\n' )
         phrase = "Which rookie "
         if line.find( phrase )!= -1: 
-            headers.append( line )
-            results.append( line ) 
-            
-        responses = line.splitlines()
-        for response in responses: 
-            if response.find( "%" )!= -1: 
-                results.append( response )
+            responses.append( "SPLIT" ) 
+        
+        ans = line.splitlines()
+        for an in ans: 
+            if an.find( "%" )!= -1: 
+                responses.append( an )
     
-    # checks each line for the player pattern using Regex 
-    # if the line contains "Last", skip the line
     players = []
-    for result in results: 
+    for response in responses: 
+        if response.find("SPLIT")!= -1: 
+            players.append( response )
         pattern = '[a-zA-Z]* [a-zA-Z]* [\, [a-zA-Z]*' 
-        match = re.search(pattern, result)
-        re.match(pattern, result) 
-        if match and ( result.find( "Last" )== -1 ): 
+        match = re.search(pattern, response)
+        re.match(pattern, response) 
+                
+        # checks each line for the player pattern using Regex 
+        # if the line contains "Last", skip the line
+        if match and ( response.find( "Last " )== -1 ): 
             new_line = match.group()
             players.append(new_line)  
-    survey = { file_name : players }
-    return survey
-                
-                
-
     
+    # uses itertools and splits the responses to question into its own array 
+    keyword = "SPLIT"
+    spl = [list(y) for x, y in itertools.groupby(players, lambda z: z == keyword) if not x]
     
-
+    return spl 
     
-        
-        
-    
-
-
-             
-                
-
     
 main()
