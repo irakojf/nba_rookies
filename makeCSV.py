@@ -28,6 +28,8 @@ def create( survey_file ):
         csv_app = csv.writer( csv_file )
         csv_app.writerow( key )
         csv_app.writerow( data )
+
+
     
 if __name__ == '__main__':
     create(sys.argv[1])

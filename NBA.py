@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*- 
 
 """ 
-    Sample basketball players 
-    1. Top 5 rookies in each season 
-    2. Optional: Narrow down to rookies that were picked after 
-        the first 10 selections (sleeper picks)
-    3. Sort by position, years played in college, team 
-        performance of team (indicated by seeding at end of season), 
-        position on depth chart, minutes played 
+Holds a number of different functions to manipulate survey data
+
 """ 
-import re
+
 import pandas as pd
 import csv
 from makeCSV import create
-from ast import literal_eval as make_tuple
 
 def main(): 
     global file_list
@@ -40,7 +34,6 @@ def main():
              's1516.txt',
              's1617.txt']
     
-    manip_sleeper()
     
 def csv_create(): 
     # creates a CVS for the following text files
@@ -63,32 +56,8 @@ def best_player():
         csv_app = csv.writer( csv_file )
         csv_app.writerow( year )
         csv_app.writerow( best_player )
-   
-def sleeper(): 
-    # creates a new .csv for each year's "sleeper successes"
-    
-    sleeper = []
-    year = []
-    for file in a_list:
-        csv_file = file[:-4] + ".csv"
-        df=pd.read_csv(csv_file, sep=',',header=None)
-        df.values
-        year.append( file )
-        sleeper.append( df.values[1][3] )
-    
-    for file in b_list:
-        csv_file = file[:-4] + ".csv"
-        df=pd.read_csv(csv_file, sep=',',header=None)
-        df.values
-        year.append( file )
-        sleeper.append( df.values[1][2] )
-        
-    with open('sleeper.csv', 'w') as csv_file: 
-        csv_app = csv.writer( csv_file )
-        csv_app.writerow( year )
-        csv_app.writerow( sleeper )   
 
-def manip_sleeper(): 
+def sleeper(): 
     # creates a new .csv for each year's "sleeper successes"
     
     sleeper = []
@@ -128,10 +97,11 @@ def manip_sleeper():
               junk.append(l)
           else: 
               h.append(l) 
+    return h 
+
     for i in range(0, (len(h))): 
         with open('sleeper1.csv', 'w') as csv_file: 
             csv_app = csv.writer( csv_file )
             csv_app.writerow( h )  
-
 
 main()
