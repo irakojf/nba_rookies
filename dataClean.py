@@ -7,6 +7,7 @@
 import pandas as pd
 import csv
 import sys
+import os 
 
 from surveyParse import parse
 from surveyParse import headers
@@ -35,6 +36,7 @@ def main():
              's1415.txt',
              's1516.txt',
              's1617.txt']
+
 
 def create( survey_file ):
     key = headers( survey_file )
@@ -74,7 +76,8 @@ def sleeper():
     sleeper = []
     year = []
     for file in a_list:
-        a = "/Users/irako/Desktop/nba_rookies/csvfiles/"
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        a = dir_path + "/csvfiles/"
         csv_file = a + file[:-4] + ".csv"
         df=pd.read_csv(csv_file, sep=',',header=None)
         df.values
@@ -82,7 +85,8 @@ def sleeper():
         sleeper.append( df.values[1][3] )
 
     for file in b_list:
-        a = "/Users/irako/Desktop/nba_rookies/csvfiles/"
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        a = dir_path + "/csvfiles/"
         csv_file = a + file[:-4] + ".csv"
         df=pd.read_csv(csv_file, sep=',',header=None)
         df.values
@@ -110,11 +114,16 @@ def sleeper():
               junk.append(l)
           else:
               h.append(l)
+    
     return h
 
+
+    # move above return to run 
+    
     for i in range(0, (len(h))):
-        with open('sleeper1.csv', 'w') as csv_file:
+        with open('sleeper.csv', 'w') as csv_file:
             csv_app = csv.writer( csv_file )
             csv_app.writerow( h )
+            
 
 main()
