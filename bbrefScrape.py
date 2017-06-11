@@ -22,11 +22,15 @@ import time
 
 # for BeautifulSoup
 import pandas as pd
+import numpy as np
 from bs4 import BeautifulSoup
 import requests
 
 
 ### Sets up the HTMLTableParser for BeautifulSoup
+
+global dir_path 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 class HTMLTableParser():
 
@@ -101,22 +105,23 @@ def scrape():
 ### Uses Selenium to open each player's profile page on
 ### basketball-reference.com on an individual tab
 
-    executable_path = "/Users/irako/Desktop/nba_rookies/chromedriver"
+    executable_path = dir_path + "/chromedriver"
     os.environ["webdriver.chrome.driver"] = executable_path
 
     chrome_options = Options()
-    chrome_options.add_extension("/Users/irako/Desktop/nba_rookies/adb.crx")
-    chrome_options.add_extension("/Users/irako/Desktop/nba_rookies/vim.crx")
+    chrome_options.add_extension(dir_path + "/adb.crx")
+    chrome_options.add_extension(dir_path + "/vim.crx")
 
     driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options)
 
+    url_lists = []
     for i in sleeper():
         driver.get('http://www.basketball-reference.com/');
         search_box = driver.find_element_by_name('search')
         search_box.send_keys(i + Keys.ARROW_DOWN + Keys.RETURN)
 
-
         url = driver.current_url
+        url_lists.append(url)
         print( "Player name: " + i + "\nURL: " + url ) # prints the current URL
 
 
@@ -143,4 +148,8 @@ def scrape():
         body.send_keys('t' + 'K')
         driver.switch_to_window(driver.window_handles[-1])
 
+    with open('url.csv', 'w') as csv_file:
+            csv_app = csv.writer( csv_file )
+            csv_app.writerow( url_lists )
+        
 scrape()
