@@ -7,7 +7,7 @@
 
 # Usage: 
 # function(playdict['player name'])
-# per(playdict['James Harden'])
+# current_per(playdict['James Harden'])
 
 from dataClean import sleeper
 from lxml import html
@@ -32,18 +32,20 @@ for k in sleeper():
 global playdict
 playdict = dict(zip(players, urls))
 
-            
-def per(url): 
+
+def current_per(url): 
     page = requests.get(url)
     tree = html.fromstring(page.content)
-    per = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[1]/p[2]/text()")   
-    return per
+    current_per = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[1]/p[2]/text()")   
+    print (current_per)
+    return current_per
 
 
 def winShare(url): 
     page = requests.get(url)
     tree = html.fromstring(page.content)
     winShare = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[2]/p[2]/text()")   
+    print (winShare)
     return winShare
 
 def draft(url): 
@@ -52,6 +54,7 @@ def draft(url):
     start = soup.find("Draft:")
     end = soup.find("overall)")
     draft = (soup[start:end] + "overall)")[7:]
+    print (draft)
     return draft
 
     # pattern = 'Draft+[\w\s\:(),]+overall'
