@@ -14,6 +14,7 @@ from dataClean import sleeper
 
 # for Selenium
 import os
+import csv
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
@@ -147,6 +148,8 @@ def scrape():
         body = driver.find_element_by_tag_name('body')
         body.send_keys('t' + 'K')
         driver.switch_to_window(driver.window_handles[-1])
+    
+    return url_lists 
 
     with open('url.csv', 'w') as csv_file:
             csv_app = csv.writer( csv_file )

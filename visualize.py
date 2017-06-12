@@ -2,9 +2,10 @@
 
 # Visualizes trends in .csv data
 
+from getStat import *
+from dataClean import sleeper
 
 import os 
-from dataClean import sleeper
 import pandas as pd
 import numpy as np 
 
@@ -24,5 +25,9 @@ def read(name):
     print (df) 
     print ('\n')
 
-read('Nerlens Noel' )
-read('DeJuan Blair')
+#read('Nerlens Noel' )
+#read('DeJuan Blair')
+
+
+for i in sleeper(): 
+    print(draft(playdict[i]))
