@@ -22,6 +22,7 @@ import pandas as pd
 import numpy as np 
 import requests
 
+#print(PER('James Harden', '2016-17'))
 
 ### Set up ###
 
@@ -42,9 +43,80 @@ for k in sleeper():
 global playdict
 playdict = dict(zip(players, urls))
 
-### Functions ###
+### Functions for Individual Players ###
+
+def see_data(name): 
+    # Returns general player data, represented by a table
+    df = pd.read_csv(exports_path + name + '.csv', 
+                     usecols = ['Season', 'Tm', 'Pos', 'AST', 'ORB']
+                     )
+    print ('\n' + name + '\n')
+    print (df) 
+    print ('\n')
+    return df
+
+def player_stat(name, season, stat): 
+    # Returns specific player data, e.g. FG or 2P%
+    df = pd.read_csv(exports_path + name + '.csv', 
+                     usecols = ['Season', stat ]
+                     )
+    if stat == 'Tm': 
+        out = df.loc[df['Season'] == season, stat].iloc[0]
+    else: 
+        out = df.loc[df['Season'] == season, stat].iloc[0].astype(float)
+    return out
+
+def PER(name, season): 
+    team = player_stat(name, season, 'Tm')
+    
+    iVOP = VOP(season)
+    ifactor = factor(season)
+    iDRBP = DRBP(season)
+    
+    a = LeagueStat(season)    
+    lg_FT = a.get('FT')
+    lg_FTA = a.get('FTA')
+    lg_PF = a.get('PF')
+    
+    tm_AST = team_basicstat(season, team, 'AST')
+    tm_FG = team_basicstat(season, team, 'FG')
+    
+    ### Player stats required for PER ### 
+    assist = player_stat(name, season, 'AST')
+    minutes = player_stat(name, season, 'MP')
+    threePT = player_stat(name, season, '3P')
+    fg = player_stat(name, season, 'FG')
+    ft = player_stat(name, season, 'FT')
+    fta = player_stat(name, season, 'FTA')
+    fga = player_stat(name, season, 'FGA')
+    to = player_stat(name, season, 'TOV')
+    true_rebound = player_stat(name, season, 'TRB')
+    off_rebound = player_stat(name, season, 'ORB')
+    steals = player_stat(name, season, 'STL')
+    blocks = player_stat(name, season, 'BLK')
+    personalfoul = player_stat(name, season, 'PF')
+    
+    PER = (( 1 / minutes ) * (threePT + (2/3 * assist) + 
+           (2 - ifactor * tm_AST / tm_FG) * fg ) + 
+           (0.5 * ft * (2 - 1/3 * tm_AST / tm_FG)) - 
+           (iVOP * to) - (iVOP * iDRBP * (fga - fg)) - 
+           (iVOP * 0.44 * (0.44 + (0.56 * iDRBP)) * (fta - ft)) + 
+           (iVOP * (1 - iDRBP) * (true_rebound - off_rebound)) + 
+           (iVOP * iDRBP * off_rebound) + (iVOP * steals) + (iVOP * iDRBP * blocks) - 
+           (personalfoul * (lg_FT / lg_PF - 0.44 * lg_FTA / lg_PF * iVOP)))
+    
+    return PER
+    
+
+def DRBP(season): 
+    a = LeagueStat(season)    
+    lg_TRB = a.get('TRB')
+    lg_ORB = a.get('ORB%')
+    DRBP = (lg_TRB - lg_ORB) / lg_TRB
+    return DRBP
 
 def current_per(url): 
+    # Returns an individual player's PER for this year
     page = requests.get(url)
     tree = html.fromstring(page.content)
     current_per = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[1]/p[2]/text()")   
@@ -53,6 +125,7 @@ def current_per(url):
 
 
 def winShare(url): 
+    # Returns an individual player's winShare for this year
     page = requests.get(url)
     tree = html.fromstring(page.content)
     winShare = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[2]/p[2]/text()")   
@@ -60,6 +133,7 @@ def winShare(url):
     return winShare
 
 def draft(url): 
+    # Returns a player's draft position
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'lxml').get_text()
     start = soup.find("Draft:")
@@ -71,26 +145,7 @@ def draft(url):
     # pattern = 'Draft+[\w\s\:(),]+overall'
     # did not end up using regex 
     
-def findData(): 
-# Identifies which variables in the PER formula are 
-# unavailable in our data set 
-    
-    formula = ["MP", "3P", "AST", "STL", "BLK", "PF", 
-               "FG", "FGA", "FT", "FTA",
-               "team_FG", "team_FG", "team_AST",
-               "VOP", "TOV", "DRB%", "factor", "TRB",
-               "ORB", "lg_FT", "lg_PF", "lg_FTA", "lg_PF"]
-    
-    havedata = []
-    for column in columns('James Harden'): 
-        havedata.append(column)
-        
-    match = (set(havedata) & set(formula))
-    missingdata = set(formula) - match 
-    
-    print(missingdata)
-    return(missingdata)
-
+### League and Team Functions ###
 
 def VOP(season): 
     a = LeagueStat(season)    
@@ -133,6 +188,9 @@ def team_stat(season, team, stat):
 
     team_stat = (team_data.loc[team_data['Season'] == season, stat].iloc[0])
     return team_stat
+
+    
+### Classes for League and Team stats ###
 
 class LeagueStat(object): 
     
@@ -211,3 +269,32 @@ class TeamParser():
             # creates a .csv file out of Dataframe
             # df.to_csv(path)
             return df
+
+### Helper functions ### 
+def __findData(): 
+# Identifies which variables in the PER formula are 
+# unavailable in our data set 
+    
+    formula = ["MP", "3P", "AST", "STL", "BLK", "PF", 
+               "FG", "FGA", "FT", "FTA",
+               "team_FG", "team_FG", "team_AST",
+               "VOP", "TOV", "DRB%", "factor", "TRB",
+               "ORB", "lg_FT", "lg_PF", "lg_FTA", "lg_PF"]
+    
+    havedata = []
+    for column in columns('James Harden'): 
+        havedata.append(column)
+        
+    match = (set(havedata) & set(formula))
+    missingdata = set(formula) - match 
+    
+    print(missingdata)
+    return(missingdata)
+
+def allPlayers():
+    for i in sleeper():
+        print( i )
+
+def columns(name):
+    columns = pd.read_csv(exports_path + name + '.csv').columns
+    return (columns)
