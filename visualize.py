@@ -8,6 +8,7 @@ from dataClean import sleeper
 import os 
 import pandas as pd
 import numpy as np 
+import requests
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -17,6 +18,10 @@ def allPlayers():
     for i in sleeper():
         print( i )
 
+def columns(name):
+    columns = pd.read_csv(exports_path + name + '.csv').columns
+    return (columns)
+
 def read(name): 
     df = pd.read_csv(exports_path + name + '.csv', 
                      usecols = ['Season', 'Tm', 'Pos', 'AST', 'ORB']
@@ -24,10 +29,23 @@ def read(name):
     print ('\n' + name + '\n')
     print (df) 
     print ('\n')
+    return df
 
-#read('Nerlens Noel' )
-#read('DeJuan Blair')
+#print(team_stat('1950-51', 'NYK', 'Pace'))
+#print(VOP('2016-17'))
+#print(factor('2016-17'))    
 
+# print(PER('James Harden', '2016-17'))
 
-for i in sleeper(): 
-    print(draft(playdict[i]))
+print(player_stat('James Harden', '2016-17', 'Tm'))
+print(team_stat('2016-17', 'HOU', 'SRS'))
+    
+    
+    
+    
+    
+    
+    
+
+    
+
