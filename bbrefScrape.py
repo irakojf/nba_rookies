@@ -97,7 +97,6 @@ class HTMLTableParser():
             # creates a .csv file out of Dataframe
             # df.to_csv(path)
             
-            print (df)
             return df
 
 
