@@ -143,26 +143,32 @@ def player_stat(name, season, stat):
     df = pd.read_csv(exports_path + name + '.csv', 
                      usecols = ['Season', stat ]
                      )
+    
+    d1 = pd.read_csv(exports_path + name + '.csv', 
+                     usecols = ['Season', 'G' ]
+                     )    
     if stat == 'Tm': 
         out = df.loc[df['Season'] == season, stat].iloc[0]
     else: 
-        out = df.loc[df['Season'] == season, stat].iloc[0].astype(float)
+        a = d1.loc[df['Season'] == season, 'G'].iloc[0].astype(float)
+        b = df.loc[df['Season'] == season, stat].iloc[0].astype(float)
+        out = a * b
     return out
 
 def PER(name, season): 
     team = player_stat(name, season, 'Tm')
     
-    iVOP = VOP(season)
-    ifactor = factor(season)
-    iDRBP = DRBP(season)
+    iVOP = VOP(season)                  # numpy.float64
+    ifactor = factor(season)            # numpy.float64
+    iDRBP = DRBP(season)                # numpy.float64
     
     a = LeagueStat(season)    
-    lg_FT = a.get('FT')
-    lg_FTA = a.get('FTA')
-    lg_PF = a.get('PF')
+    lg_FT = a.get('FT')                 # numpy.float64
+    lg_FTA = a.get('FTA')               # numpy.float64
+    lg_PF = a.get('PF')                 # numpy.float64
     
-    tm_AST = team_basicstat(season, team, 'AST')
-    tm_FG = team_basicstat(season, team, 'FG')
+    tm_AST = float(team_basicstat(season, team, 'AST'))
+    tm_FG = float(team_basicstat(season, team, 'FG'))
     
     ### Player stats required for PER ### 
     assist = player_stat(name, season, 'AST')
@@ -175,20 +181,23 @@ def PER(name, season):
     to = player_stat(name, season, 'TOV')
     true_rebound = player_stat(name, season, 'TRB')
     off_rebound = player_stat(name, season, 'ORB')
+    def_rebound = player_stat(name, season, 'DRB')
     steals = player_stat(name, season, 'STL')
     blocks = player_stat(name, season, 'BLK')
-    personalfoul = player_stat(name, season, 'PF')
+    personalfoul = player_stat(name, season, 'PF') 
     
-    PER = (( 1 / minutes ) * (threePT + (2/3 * assist) + 
-           (2 - ifactor * tm_AST / tm_FG) * fg ) + 
-           (0.5 * ft * (2 - 1/3 * tm_AST / tm_FG)) - 
-           (iVOP * to) - (iVOP * iDRBP * (fga - fg)) - 
-           (iVOP * 0.44 * (0.44 + (0.56 * iDRBP)) * (fta - ft)) + 
-           (iVOP * (1 - iDRBP) * (true_rebound - off_rebound)) + 
-           (iVOP * iDRBP * off_rebound) + (iVOP * steals) + (iVOP * iDRBP * blocks) - 
-           (personalfoul * (lg_FT / lg_PF - 0.44 * lg_FTA / lg_PF * iVOP)))
-    
-    return PER
+ 
+    uPER = ( 1 / minutes ) * ( threePT + ( 2.0 / 3.0 ) * assist + ( 2.0 - ifactor * ( tm_AST / tm_FG )) * fg + 
+           ( ft * 0.5 * ( 1 + ( 1 - ( tm_AST / tm_FG )) + ( 2.0 / 3.0 ) * ( tm_AST / tm_FG ) )) - 
+           iVOP * to - iVOP * iDRBP * ( fga - fg ) - iVOP * 0.44 * ( 0.44 + ( 0.56 * iDRBP )) * ( fta - ft ) + 
+           iVOP * ( 1 - iDRBP ) * ( true_rebound - off_rebound ) + iVOP * iDRBP * off_rebound + iVOP * steals + 
+           iVOP * iDRBP * blocks - personalfoul * ((lg_FT / lg_PF) - 0.44 * (lg_FTA / lg_PF) * iVOP))
+
+    lPER = ( 1 / minutes ) * ((fg * 85.910) + (steals * 53.897) + (threePT * 51.757) + (ft * 46.845) + (blocks * 39.190) + 
+            (off_rebound * 39.190) + (assist * 39.190) + (def_rebound * 14.707) - (personalfoul * 17.174) - 
+            ((fta - ft) * 17.174) - ((fga - fg) * 39.190) - (to * 53.97))
+   
+    return lPER
     
 
 def DRBP(season): 
@@ -247,7 +256,7 @@ def factor(season):
     lg_FG = a.get('FG%')
     lg_FT = a.get('FT%')
 
-    factor = 2/3 - ((0.5 * lg_AST / lg_FG) / (2 * lg_FG / lg_FT))
+    factor = ( 2.0 / 3.0 ) - (0.5 * (lg_AST / lg_FG)) / (2 * (lg_FG / lg_FT))
     return factor
 
 def team_stat(season, team, stat): 
@@ -257,7 +266,10 @@ def team_stat(season, team, stat):
                 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
     if team not in acronyms:
-        raise Exception("Invalid team name")
+        if team == 'TOT': 
+            raise Exception("Multiple teams")
+        else: 
+            raise Exception("Invalid team name")
     
     acronym = team 
     
@@ -279,7 +291,10 @@ def team_basicstat(season, team, stat):
                 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS']
 
     if team not in acronyms:
-        raise Exception("Invalid team name")
+        if team == 'TOT': 
+            raise Exception("Multiple teams")
+        else: 
+            raise Exception("Invalid team name")
     
     acronym = team 
     
@@ -322,3 +337,27 @@ def allPlayers():
 def columns(name):
     columns = pd.read_csv(exports_path + name + '.csv').columns
     return (columns)
+
+def printVars(): 
+    print(team)
+    print(iVOP)
+    print(ifactor)
+    print(iDRBP)
+    print(lg_FT)
+    print(lg_FTA)
+    print(lg_PF)
+    print(tm_AST)
+    print(tm_FG)
+    print(assist)
+    print(minutes)
+    print(threePT)
+    print(fg)
+    print(ft)
+    print(fta)
+    print(fga)
+    print(to)
+    print(true_rebound)
+    print(off_rebound)
+    print(steals)
+    print(blocks)
+    print(personalfoul)

@@ -2,7 +2,7 @@
 
 # Visualizes trends in .csv data
 
-from getStat_b import *
+from getStat import *
 from dataClean import sleeper
 
 import os 
@@ -31,11 +31,15 @@ def read(name):
     print ('\n')
     return df
 
-    
+#print(team_stat('1950-51', 'NYK', 'Pace'))
+#print(VOP('2016-17'))
+#print(factor('2016-17'))    
 
-    
-    
-    
+print(PER('Nerlens Noel', '2015-16'))
+
+#print(player_stat('James Harden', '2016-17', 'Tm'))
+#print(team_basicstat('2013-14', 'NYK', 'AST'))
+
     
     
     
