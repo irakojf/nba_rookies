@@ -43,36 +43,6 @@ def read(name):
 #read('Terrence Williams')
 #read('Norris Cole')
 
-###
-
-player = 'DeJuan Blair'
-read(player)
-
-blair_PER = []    
-
-
-#2009-10	SAS
-#2010-11	SAS
-#2011-12	SAS
-#2012-13	SAS
-#2013-14	DAL
-#2014-15	WAS
-#2015-16	WAS
-
-SAS  = ['2009-10', '2010-11', '2011-12', '2012-13'] 
-DAL = ['2013-14']
-WAS = ['2014-15', '2015-16']
-
-for i in SAS: 
-    PER(player, i, 'SAS')
-    
-for i in DAL: 
-    PER(player, i, 'DAL')
-    
-for i in WAS: 
-    PER(player, i, 'WAS')
-    
-
 
 ###
 

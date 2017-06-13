@@ -24,6 +24,8 @@ import os
 import pandas as pd
 import numpy as np 
 import requests
+import matplotlib.pyplot as plt
+
 
 
 ### Set up ###
@@ -44,6 +46,7 @@ for k in sleeper():
 
 global playdict
 playdict = dict(zip(players, urls))
+
 
 ### Classes for League and Team stats ###
 
@@ -153,10 +156,13 @@ def player_stat(name, season, stat):
         a = d1.loc[df['Season'] == season, 'G'].iloc[0].astype(float)
         b = df.loc[df['Season'] == season, stat].iloc[0].astype(float)
         out = a * b
+        
     return out
 
-def PER(name, season): 
-    team = player_stat(name, season, 'Tm')
+def PER(name, season, team): 
+    # Note: Uses Linear Weighted PER as a proxy for actual PER 
+    # http://bleacherreport.com/articles/113144-cracking-the-code-how-to-calculate-hollingers-per-without-all-the-mess
+    #team = player_stat(name, season, 'Tm')
     
     iVOP = VOP(season)                  # numpy.float64
     ifactor = factor(season)            # numpy.float64
@@ -197,6 +203,7 @@ def PER(name, season):
             (off_rebound * 39.190) + (assist * 39.190) + (def_rebound * 14.707) - (personalfoul * 17.174) - 
             ((fta - ft) * 17.174) - ((fga - fg) * 39.190) - (to * 53.97))
    
+    print(lPER)
     return lPER
     
 
@@ -205,6 +212,7 @@ def DRBP(season):
     lg_TRB = a.get('TRB')
     lg_ORB = a.get('ORB%')
     DRBP = (lg_TRB - lg_ORB) / lg_TRB
+    
     return DRBP
 
 def current_per(url): 
@@ -212,6 +220,7 @@ def current_per(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
     current_per = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[1]/p[2]/text()")   
+    
     print (current_per)
     return current_per
 
@@ -221,6 +230,7 @@ def winShare(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
     winShare = tree.xpath("/html/body/div/div/div[@class='stats_pullout']/div[@class='p3']/div[2]/p[2]/text()")   
+    
     print (winShare)
     return winShare
 
@@ -231,6 +241,7 @@ def draft(url):
     start = soup.find("Draft:")
     end = soup.find("overall)")
     draft = (soup[start:end] + "overall)")[7:]
+    
     print (draft)
     return draft
 
@@ -248,6 +259,7 @@ def VOP(season):
     lg_FTA = a.get('FTA')
     
     VOP = lg_PTS / (lg_FGA - lg_ORB + lg_TO + 0.44 * lg_FTA)
+    
     return VOP 
 
 def factor(season): 
@@ -257,6 +269,7 @@ def factor(season):
     lg_FT = a.get('FT%')
 
     factor = ( 2.0 / 3.0 ) - (0.5 * (lg_AST / lg_FG)) / (2 * (lg_FG / lg_FT))
+    
     return factor
 
 def team_stat(season, team, stat): 
@@ -267,7 +280,7 @@ def team_stat(season, team, stat):
 
     if team not in acronyms:
         if team == 'TOT': 
-            raise Exception("Multiple teams")
+            print ('Multiple teams')
         else: 
             raise Exception("Invalid team name")
     
@@ -292,7 +305,7 @@ def team_basicstat(season, team, stat):
 
     if team not in acronyms:
         if team == 'TOT': 
-            raise Exception("Multiple teams")
+            print('Multiple teams')
         else: 
             raise Exception("Invalid team name")
     
