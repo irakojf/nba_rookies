@@ -15,86 +15,123 @@ sleepers = ['Hassan Whiteside', 'Jeremy Lin', 'Draymond Green', 'Jae Crowder',
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-def get_df(name, groupby, stat): 
+def get_df(name, statgroup, groupby=''): 
     # groupby: ['Big Men', 'Guards', 'PG', 'SG' ... 'C']
-    # stat: advanced or per_game
-    path = dir_path + '/' + stat + '_exports/' + groupby + '/' + name + '.csv'
+    # statgroup: advanced or per_game
+    path = dir_path + '/' + statgroup + '_exports/' + groupby + '/' + name + '.csv'
     df = pd.read_csv(path)
     df = df.fillna(0.0) # replaces all NaN with 0.0
     return df
 
-#### Sample Queries ####
 
-# Select the player column (multiple queries)
-    # print( df.iloc[1:]['Player'] )
-    # print( df.loc[:, 'Player'] )
+def plot(name, statgroup, stat, groupby='', perchange=False):
+# Plots a time series of a particular stat's change over time where
+    if perchange == True: 
+        title = ( stat + ' % change over time for ' + name )
+        print(title)
+        df = get_df(name, statgroup, groupby) 
+        df2 = df[['Season', stat]] # only output the 'Season' and 'PER' columns
+        
+        # find the index of the 'Career' value
+        # since the index outputs as numpy [4], convert into a list
+        # loop through the list and set b equal to index value
+        a = list(df2.loc[df2['Season'] == 'Career'].index)
+        for i in a: 
+            b = i
+        df2 = df2[:b]
+        df3 = df2[stat]  
+        
+        
+        # Y-Axis
+        yaxis = []
+        for i in df3[1:]: 
+            yaxis.append(float(i))
+        yaxis.append(0.0)
+        yaxis = (yaxis - df3)[:-1] # remove the last object in the list
+        yaxis = pd.Series(yaxis)
+        #print(yaxis)
+        
+        
+        # X-Axis
+        xaxis = []
+        for i in df2['Season'][1:]: 
+            xaxis.append(i)
+        xaxis = pd.Series(xaxis, name='Season')
+        #print(xaxis)
+        
+        table = pd.concat([xaxis, yaxis], axis=1)
+        print(table)
+        table.plot(x=xaxis)
+        plt.legend([name])
     
-# Select the first row 
-    # print( df.iloc[2] )
-    # Prints the header as well as the first row 
-
-# Select the value
-    # print( df.iloc[1][8] )
-    # [index_row][index_column]
-
-# Select multiple columns
-    # print ( df[['Player', 'PER']] )
-    
-
-### Queries ###
-# query() returns df
-# scrape(sleepers, 'per_game')
- 
-
-def plotCenters(name):
-    df = get_df(name, 'C', 'advanced') 
-    df2 = df[['Season', 'PER']] # only output the 'Season' and 'PER' columns
-    
-    # find the index of the 'Career' value
-    # since the index outputs as numpy [4], convert into a list
-    # loop through the list and set b equal to index value
-    a = list(df2.loc[df2['Season'] == 'Career'].index)
-    for i in a: 
-        b = i
-    df2 = df2[:b]
-    df3 = df2['PER']  
-    df3.plot()
-
-### Queries ###
-"""
-
-setB = ['DeAndre Jordan', 'Steven Adams']
-for center in setB: 
-    plotCenters(center)
-plt.legend(setB)
-
-"""
+    else:
+        title = ( stat + ' over time for ' + name )
+        print(title)
+        df = get_df(name, statgroup, groupby='') 
+        df2 = df[['Season', stat]] # only output the 'Season' and 'PER' columns
+        
+        # find the index of the 'Career' value
+        # since the index outputs as numpy [4], convert into a list
+        # loop through the list and set b equal to index value
+        a = list(df2.loc[df2['Season'] == 'Career'].index)
+        for i in a: 
+            b = i
+        df2 = df2[:b]
+        df3 = df2[stat]  
+        
+        # Y-Axis
+        yaxis = pd.Series(df3)
+        
+        # X-Axis
+        xaxis = []
+        for i in df2['Season']: 
+            xaxis.append(i)
+        xaxis = pd.Series(xaxis, name='Season')
+        #print(xaxis)
+        
+        table = pd.concat([xaxis, yaxis], axis=1)
+        print(table)
+        table.plot(x=xaxis)
+        plt.legend([name])
 
 
-def plotGuards(name):
-    df = get_df(name, 'Guards', 'advanced') 
-    df2 = df[['Season', 'OBPM']] # only output the 'Season' and 'PER' columns
-    
-    # find the index of the 'Career' value
-    # since the index outputs as numpy [4], convert into a list
-    # loop through the list and set b equal to index value
-    a = list(df2.loc[df2['Season'] == 'Career'].index)
-    for i in a: 
-        b = i
-    df2 = df2[:b]
-    df3 = df2['OBPM']  
-    df3.plot()
+#### Queries #### 
+plot('Klay Thompson', 'advanced', 'PER', True)
 
 
-setA = ['Kyle Lowry', 'Isaiah Thomas', 'Kyle Korver', 'Lance Stephenson', 'Jeremy Lin']
+##########################
+
+### Old Queries ###  
+''' 
+##########################
+
+
+scrape(['Javale McGee'], 'advanced')
+scrape(['Michael Jordan', 'Klay Thompson'], 'advanced')
+scrape(['Michael Jordan', 'Klay Thompson'], 'per_game')
+
+
+##########################
+
+
+scrape(['Lebron James', 'Stephen Curry'], 'per_game')
+setB = ['Lebron James', 'Stephen Curry']
+for player in setB: 
+    plot(player, 'per_game', 'AST')
+    plt.legend(setB)
+
+##########################
+
+setA = ['Lebron James', 'Stephen Curry']
 for player in setA: 
-    plotGuards(player)
-plt.legend(setA)
+    plot_perchange(player, 'PER')
+    plt.legend(setA)
+    
+##########################
 
 
+# print(get_df('Jeremy Lin', 'Guards', 'advanced'))
 
-print(get_df('Jeremy Lin', 'Guards', 'advanced'))
-
-
+'''
 
 

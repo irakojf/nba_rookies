@@ -30,7 +30,7 @@ from bs4 import BeautifulSoup
 
 
 def main(): 
-    print(query())
+    scrape(['Lebron James'], 'advanced')
 
 
 ### Set up the current directory as the home path ###
@@ -162,7 +162,8 @@ def scrape(players, div):
         
         # creates the folder 'bbref_exports'; creates a path for
         # scraped data from basketball-reference (.csv) to be exported
-        newfolder = r'perGame_exports'
+        
+        newfolder = str(div + '_exports')
         if not os.path.exists(newfolder):
             os.makedirs(newfolder)
         global path
