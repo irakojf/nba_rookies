@@ -35,7 +35,6 @@ def main():
 
 global dir_path, path
 dir_path = os.path.dirname(os.path.realpath(__file__))
-path = dir_path + '/per_game/'
 
 ### Required class for parsing ### 
 
@@ -100,7 +99,7 @@ class HTMLTableParser():
             # df = df.iloc[1:]
 
             # creates a .csv file out of Dataframe
-            # df.to_csv(path + yr + '.csv')
+            df.iloc[1:].to_csv(path)
             
             # print(df.iloc[1:])
             

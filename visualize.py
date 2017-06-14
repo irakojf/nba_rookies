@@ -28,28 +28,18 @@ from tablePuller import *
 
 ### Queries ###
 # query() returns df
+ 
+scrape(['Hassan Whiteside'], 'advanced')
+
 
 """
-
-years = []
-for i in range(0, 19):
-    year = str(1999 + i)
-    years.append(year)
-
-timPER = [] 
-
-for year in years: 
-    df = team_query('SAS', year, 'advanced')
-    try: 
-        a = (df.loc[df['Player'] == 'Tim Duncan', 'PER']).values
-        timPER.append( a )
-    except KeyError: 
-        pass
-
-""" 
-
-scrape(['Tim Duncan', 'Carmelo Anthony'], 'advanced')
-
+scrape(['Hassan Whiteside', 'Jeremy Lin', 'Draymond Green', 'Jae Crowder', 
+        'Jimmy Butler', 'Kyle Lowry', 'Isiah Thomas', 'Kyle Corver', 'Lance Stephenson', 
+        'Matthew Dellavadova', 'Marcin Gortat', 'Wesley Matthews', 'Seth Curry', 'Patrick Beverly', 
+        'Trevor Ariza', 'Marc Gasol', 'Kenneth Farried', 'Will Barton', 'Rudy Gobert', 
+        'DeAndre Jordan', 'Ryan Anderson', 'Tyler Johnson', 'Jusuf Nurkic', 'Nikola Mirotic', 
+        'Steven Adams', 'Clint Capella' ], 'advanced')
+"""
 
 
 
