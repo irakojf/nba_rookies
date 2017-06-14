@@ -1,138 +1,57 @@
 # visualize.py
 
-# Visualizes trends in .csv data
-
-from getStat import *
-from dataClean import sleeper
-#%matplotlib inline
-
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-exports_path = dir_path + '/bbref_exports/'
-
-def allPlayers():
-    players = []
-    for i in sleeper():
-        print( i )
-        players.append(i)
-    return players
-
-def columns(name):
-    columns = pd.read_csv(exports_path + name + '.csv').columns
-    return (columns)
-
-def read(name): 
-    df = pd.read_csv(exports_path + name + '.csv', 
-                     usecols = ['Season', 'Tm', 'PTS']
-                     )
-    print ('\n' + name + '\n')
-    print (df) 
-    print ('\n')
-    return df
-
-
-
-
-
-# allPlayers()
-
-#allPlayers()
-#read('DeJuan Blair')
-#read('Austin Daye')
-#read('Jodie Meeks')
-#read('Terrence Williams')
-#read('Norris Cole')
-
 ###
 
-player = 'DeJuan Blair'
-read(player)
-
-blair_PER = []    
+from tablePuller import *
 
 
-#2009-10	SAS
-#2010-11	SAS
-#2011-12	SAS
-#2012-13	SAS
-#2013-14	DAL
-#2014-15	WAS
-#2015-16	WAS
 
-SAS  = ['2009-10', '2010-11', '2011-12', '2012-13'] 
-DAL = ['2013-14']
-WAS = ['2014-15', '2015-16']
+#### Sample Queries ####
 
-for i in SAS: 
-    PER(player, i, 'SAS')
+# Select the player column (multiple queries)
+    # print( query().iloc[1:]['Player'] )
+    # print( query().loc[:, 'Player'] )
     
-for i in DAL: 
-    PER(player, i, 'DAL')
-    
-for i in WAS: 
-    PER(player, i, 'WAS')
+# Select the first row 
+    # print( query().iloc[2] )
+    # Prints the header as well as the first row 
+
+# Select the value
+    # print( query().iloc[1][8] )
+    # [index_row][index_column]
+
+# Select multiple columns
+    # df = query()
+    # print ( df[['Player', 'PER']] )
     
 
 
-###
+### Queries ###
+# query() returns df
 
 """
 
-read('James Harden')
-# print(columns('James Harden'))
+years = []
+for i in range(0, 19):
+    year = str(1999 + i)
+    years.append(year)
 
-harden_PER = []    
-hardenOKC  = ['2009-10', '2010-11', '2011-12'] 
-hardenHOU = ['2012-13', '2013-14', '2014-15', '2015-16', '2016-17']
+timPER = [] 
 
-for years in hardenOKC: 
-    a = PER('James Harden', years, 'OKC')
-    harden_PER.append(a)
-    
-for years in hardenHOU: 
-    a = PER('James Harden', years, 'OKC')
-    harden_PER.append(a)
-    
-print(harden_PER)
+for year in years: 
+    df = team_query('SAS', year, 'advanced')
+    try: 
+        a = (df.loc[df['Player'] == 'Tim Duncan', 'PER']).values
+        timPER.append( a )
+    except KeyError: 
+        pass
 
-"""
+""" 
 
-### 
-
-"""
-player = 'Brandon Jennings'
-read(player)
-
-jennings_PER = []    
-
-jenningsMIL  = ['2009-10', '2010-11', '2011-12', '2012-13'] 
-jenningsDET = ['2013-14', '2014-15', '2015-16']
-jenningsORL = ['2015-16']
-jenningsNYK = ['2016-17']
-jenningsWAS = ['2016-17']
-
-for i in jenningsMIL: 
-    PER(player, i, 'MIL')
-    
-for i in jenningsDET: 
-    PER(player, i, 'DET')
-    
-for i in jenningsORL: 
-    PER(player, i, 'NYK')
-    
-for i in jenningsNYK: 
-    PER(player, i, 'NYK')
-
-for i in jenningsWAS: 
-    PER(player, i, 'WAS')
-
-    
-"""
+scrape(['Tim Duncan', 'Carmelo Anthony'], 'advanced')
 
 
 
-    
-    
 
-    
+
 

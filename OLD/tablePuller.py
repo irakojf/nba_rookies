@@ -5,30 +5,29 @@
 # HTML Parser adapted and adjusted from: 
 # http://srome.github.io/Parsing-HTML-Tables-in-Python-with-BeautifulSoup-and-pandas/
 
-
-# Available functions: 
-    # query(url)
-    # batch(team)
-
 ### 
 
 
 import os
 import csv
-import re
 import pandas as pd
+from bs4 import BeautifulSoup
 import requests
 
-from selenium import webdriver
-from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
 
+### User input ### 
+ 
+team = 'NYK' # Set San Antonio as the default team
 
+batch = False # Allows batch functions to be turned on (if True) or off (if False)
 
-def main(): 
-    print(query())
+if batch == False: 
+    
+    year = '1990'
+    url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fteams%2F' + team + '%2F' + year + '.html&div=div_per_game'
+
+    query(url)
+
 
 
 ### Set up the current directory as the home path ###
@@ -83,7 +82,7 @@ class HTMLTableParser():
                 column_marker = 0
                 columns = row.find_all(['td', 'th']) 
                 for column in columns:
-                    df.iloc[(row_marker),(column_marker)] = column.get_text()
+                    df.iat[(row_marker),(column_marker)] = column.get_text()
                     column_marker += 1
                 if len(columns) > 0:
                     row_marker += 1
@@ -97,12 +96,12 @@ class HTMLTableParser():
 
             # remove the first row from df 
             # the header is duplicated because we included 'th' in row 74
-            # df = df.iloc[1:]
+            df = df.iloc[1:]
 
             # creates a .csv file out of Dataframe
             # df.to_csv(path + yr + '.csv')
             
-            # print(df.iloc[1:])
+            print(df)
             
             return df
 
@@ -110,10 +109,7 @@ class HTMLTableParser():
 # Sets the URL and scrapes table data
 
 
-def team_query( team='SAS', year='1990', div_name = 'advanced' ): 
-        
-    url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fteams%2F' + team + '%2F' + year + '.html&div=div_' + div_name
-    
+def query(url): 
     # Calls the given url with BeautifulSoup
     response = requests.get(url)
     response.text[:100] 
@@ -123,72 +119,29 @@ def team_query( team='SAS', year='1990', div_name = 'advanced' ):
     table = hp.parse_url(url)[0][1] 
     table.head()
     
-    return table
 
-def scrape(players, div):
-
-### Uses Selenium to open each player's profile page on
-### basketball-reference.com on an individual tab
-
-    executable_path = dir_path + "/chromedriver"
-    os.environ["webdriver.chrome.driver"] = executable_path
-
-    chrome_options = Options()
-    chrome_options.add_extension(dir_path + "/adb.crx")
-    chrome_options.add_extension(dir_path + "/vim.crx")
-
-    driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options)
-
-    for player in players: 
-        print(player)
-        driver.get('http://www.basketball-reference.com/');
-        search_box = driver.find_element_by_name('search')
-        search_box.send_keys(player + Keys.ARROW_DOWN + Keys.RETURN)
-
-        b_url = driver.current_url
-        
-        # pulls the player id from the current url 
-        # e.g. Carmelo Anthony : anthoca01
-        # then changes the url from in browser url to the user-specified url
-        pattern = "[a-zA-Z0-9_.-]*.html"
-        m = re.search(pattern, str(b_url)).group(0)
-        player_id = m[:-5]
-        first_letter = m[:1]
-        # print(player_id)
-        
-        url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fplayers%2F' + first_letter + '%2F' + player_id + '.html&div=div_' + div
-        # print(url)
-        
-        # creates the folder 'bbref_exports'; creates a path for
-        # scraped data from basketball-reference (.csv) to be exported
-        newfolder = r'player_exports'
-        if not os.path.exists(newfolder):
-            os.makedirs(newfolder)
-        global path
-        path = newfolder + '/' + player + ".csv"
-
-        # BeautifulSoup
-        response = requests.get(url)
-        response.text[:100] # Access the HTML with the text property
-
-        hp = HTMLTableParser()
-        table = hp.parse_url(url)[0][1] # Grabbing the table from the tuple
-        table.head()
-
-
-        # Creates and switches to new tab using vimium,
-        # Selenium switches the driver to the newly created tab
-        body = driver.find_element_by_tag_name('body')
-        body.send_keys('t' + 'K')
-        driver.switch_to_window(driver.window_handles[-1])
+### Batch functions only ### 
+# Functions below can call aggregate data (e.g. stats per game for SAS from 1999 to 2017)
+if batch == True: 
     
-        print(table.iloc[1:])
+    years = []
+    for i in range(0, 19):
+        year = str(1999 + i)
+        years.append(year)
         
-    driver.quit()
     
-    return table.iloc[1:]
-    
+    urls = []
+    for year in years: 
+        # isloated url address for team's regular stats
+        url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fteams%2F' + team + '%2F' + year + '.html&div=div_per_game'
+        urls.append(url)
         
+        
+    i = 0 
+    for url in urls: 
+        yr = years[i] # yr is only used for CSV file naming
+        i+=1
+        
+        query(url)
 
-if __name__ == '__main__':
-    main()
+        
