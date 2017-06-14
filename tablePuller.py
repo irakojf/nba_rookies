@@ -18,6 +18,8 @@ import csv
 import re
 import pandas as pd
 import requests
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
@@ -160,7 +162,7 @@ def scrape(players, div):
         
         # creates the folder 'bbref_exports'; creates a path for
         # scraped data from basketball-reference (.csv) to be exported
-        newfolder = r'player_exports'
+        newfolder = r'perGame_exports'
         if not os.path.exists(newfolder):
             os.makedirs(newfolder)
         global path
