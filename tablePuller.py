@@ -127,7 +127,7 @@ def team_query( team='SAS', year='1990', div_name = 'advanced' ):
     return table
 
 def scrape(players, div):
-
+### Takes an array of players
 ### Uses Selenium to open each player's profile page on
 ### basketball-reference.com on an individual tab
 
@@ -190,7 +190,50 @@ def scrape(players, div):
     
     return table.iloc[1:]
     
+def draft(players, div): 
+    # Takes an array of players and returns a player's draft position
+    
+    executable_path = dir_path + "/chromedriver"
+    os.environ["webdriver.chrome.driver"] = executable_path
+
+    chrome_options = Options()
+    chrome_options.add_extension(dir_path + "/adb.crx")
+    chrome_options.add_extension(dir_path + "/vim.crx")
+
+    driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options)
+
+    for player in players: 
+        print(player)
+        driver.get('http://www.basketball-reference.com/');
+        search_box = driver.find_element_by_name('search')
+        search_box.send_keys(player + Keys.ARROW_DOWN + Keys.RETURN)
+
+        b_url = driver.current_url
         
+        # pulls the player id from the current url 
+        # e.g. Carmelo Anthony : anthoca01
+        # then changes the url from in browser url to the user-specified url
+        pattern = "[a-zA-Z0-9_.-]*.html"
+        m = re.search(pattern, str(b_url)).group(0)
+        player_id = m[:-5]
+        first_letter = m[:1]
+        # print(player_id)
+        
+        url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fplayers%2F' + first_letter + '%2F' + player_id + '.html&div=div_' + div
+        # print(url)
+
+        page = requests.get(url)
+        soup = BeautifulSoup(page.text, 'lxml').get_text()
+        start = soup.find("Draft:")
+        end = soup.find("overall)")
+        draft = (soup[start:end] + "overall)")[7:]
+        
+    if "overall" not in draft: 
+        print ('Undrafted')
+    else: 
+        print (draft)
+    
+    return draft        
 
 if __name__ == '__main__':
     main()

@@ -13,6 +13,17 @@ sleepers = ['Hassan Whiteside', 'Jeremy Lin', 'Draymond Green', 'Jae Crowder',
         'DeAndre Jordan', 'Ryan Anderson', 'Tyler Johnson', 'Jusuf Nurkic', 'Nikola Mirotic', 
         'Steven Adams', 'Clint Capela' ]
 
+G = ['Jeremy Lin', 'Kyle Lowry', 'Isaiah Thomas', 'Kyle Korver', 'Lance Stephenson', 
+        'Matthew Dellavedova', 'Wesley Matthews', 'Seth Curry', 'Patrick Beverly', 
+        'Tyler Johnson']
+
+SF = ['Jae Crowder', 'Jimmy Butler', 'Trevor Ariza', 'Ryan Anderson'] 
+
+Bigs = ['Hassan Whiteside', 'Draymond Green', 'Marcin Gortat', 'Marc Gasol', 
+        'Kenneth Faried', 'Will Barton', 'Rudy Gobert', 
+        'DeAndre Jordan', 'Jusuf Nurkic', 'Nikola Mirotic', 
+        'Steven Adams', 'Clint Capela' ]
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def get_df(name, statgroup, groupby=''): 
@@ -119,7 +130,10 @@ def plot(name, statgroup, stat, perchange, groupby=''):
     #plot(players, 'advanced', 'PER', False, 'Guards')
 
 
+
+#### Spurs Data Analysis ### 
 # Returns all the Spurs players
+"""
 spurs = [] 
 spurs_unique = []
 for year in range(1999, 2018):
@@ -165,21 +179,33 @@ def create_frame(player):
 
 a = create_frame('Tim Duncan')[['Player', 'PER', 'Season']]
 b = create_frame('Danny Green')[['Player', 'PER', 'Season']]
-c = pd.concat(frames).reset_index()[['Player', 'PER', 'Season']]
-d = c.groupby(['Player'])
+c = create_frame('Bruce Bowen')[['Player', 'PER', 'Season']]
+
+frames = [a, b, c]
+a['Key'] = 'Tim Duncan'
+b['Key'] = 'Danny Green'
+c['Key'] = 'Bruce Bowen'
 
 
-for player in ['Danny Green', 'Tim Duncan', 'Tony Parker']: 
-    a = create_frame(player)[['Player', 'PER', 'Season']]
-    DFGPlot = a.plot(kind='line', x='Season', y='PER', label=player)
-    
-
-#DFGPlot = b.plot(kind='bar', x='Season', y='PER', label='Tim Duncan')
+#z = pd.concat(frames, keys=['Tim Duncan', 'Danny Green', 'Bruce Bowen'])
+#cumPER = z.groupby(['Player', 'Key'])
+#cumPlot = cumPER.sum().unstack('Key').plot(kind='bar')
 
 
+y = pd.concat(frames, keys=['TD', 'DG', 'BB'])
+PER = y.groupby(['Player', 'Key'])
+PERplot = PER.plot(kind='line')
 
+"""
 
+#### More Spurs #### 
 
+#plot('Tim Duncan', 'advanced', 'PER', True, groupby='')
+#for spur in spurs: 
+#    plot(spur, 'advanced', 'PER', True, groupby='')
+
+for guard in G: 
+    plot(guard, 'advanced', 'PER', False)
 
 
 
