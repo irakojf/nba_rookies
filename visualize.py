@@ -110,6 +110,53 @@ def plot(name, statgroup, stat, perchange, groupby=''):
         plt.legend([name], title=title)
         return df2
 
+def c_overtime_avgline(name, statgroup, stat, perchange, groupby=''): 
+    title = ( stat + ' % change over time for ' + name )
+    print(title)
+    df = get_df(name, statgroup, groupby) 
+    # only output the 'Season' , 'Tm' and 'PER' columns
+    df2 = df[['Season', 'Tm', stat]] 
+    
+    # find the index of the 'Career' value
+    # since the index outputs as numpy [4], convert into a list
+    # loop through the list and set b equal to index value
+    a = list(df2.loc[df2['Season'] == 'Career'].index)
+    for i in a: 
+        b = i
+    df2 = df2[:b]
+    df3 = df2[stat]  
+        
+        
+    # Y-Axis
+    yaxis = []
+    for i in df3[1:]: 
+        yaxis.append(float(i))
+    yaxis.append(0.0)
+    yaxis = (yaxis - df3)[:-1] # remove the last object in the list
+    yaxis = pd.Series(yaxis, name='%change')
+    
+    avg = float((sum(yaxis)/len(yaxis)))
+    average = []
+    for i in yaxis: 
+        average.append(avg)
+    average = pd.Series(average, name=('Average' + stat))
+    print(yaxis)
+        
+        
+    # X-Axis
+    xaxis = []
+    for i in df2['Season'][1:]: 
+        xaxis.append(i)
+    xaxis = pd.Series(xaxis, name='Year to year')
+    #print(xaxis)
+    
+    table = pd.concat([xaxis, yaxis, average], axis=1)
+    out = df2.join([xaxis, yaxis])
+    table.plot(x=xaxis)
+    plt.legend([name], title=title)
+    
+
+
 #### Queries #### 
 
 ## NOTE: Must include 'Guard' or 'Big Men' or 'SF' for players in sleeper list
@@ -128,6 +175,31 @@ def plot(name, statgroup, stat, perchange, groupby=''):
 #for players in guards: 
     #plot(players, 'advanced', 'PER', True, 'Guards')
     #plot(players, 'advanced', 'PER', False, 'Guards')
+
+
+
+setA = [ 'Kyle Lowry', 'Isaiah Thomas', 'Tyler Johnson', 
+        'Kawhi Leonard', 'Ryan Anderson', 'Jae Crowder', 
+        'Jusuf Nurkic', 'DeAndre Jordan', 'Rudy Gobert', 
+        'Draymond Green', 'Hassan Whiteside']
+
+#for player in setA: 
+#    plot(player, 'advanced', 'WS', False)
+
+#plot('Ryan Anderson', 'per_game', 'MP', False)
+#plot('Ryan Anderson', 'per_game', 'PTS', False)
+#plot('Ryan Anderson', 'advanced', 'PER', False)
+
+
+for player in setA: 
+#    c_overtime_avgline(player, 'advanced', 'BPM', False)
+
+    plot(player, 'advanced', 'PER', False)
+    plot(player, 'advanced', 'BPM', False)
+    plot(player, 'advanced', 'WS', False)
+    plot(player, 'advanced', 'VORP', False)
+    
+
 
 
 
@@ -200,12 +272,6 @@ PERplot = PER.plot(kind='line')
 
 #### More Spurs #### 
 
-#plot('Tim Duncan', 'advanced', 'PER', True, groupby='')
-#for spur in spurs: 
-#    plot(spur, 'advanced', 'PER', True, groupby='')
-
-for guard in G: 
-    plot(guard, 'advanced', 'PER', False)
 
 
 
@@ -213,7 +279,37 @@ for guard in G:
 
 ### Old Queries ###  
 
+
 '''
+
+
+#### More Spurs #### 
+
+Find the subset of sleeper players with consistent upward trajectory. 
+
+#for guard in G: 
+#    plot(guard, 'advanced', 'PER', False)
+
+#for big in Bigs: 
+#    plot(big, 'advanced', 'PER', False)
+
+#for a in SF: 
+#    plot(a, 'advanced', 'PER', False)
+
+
+
+##########################
+
+plot('Lebron James', 'advanced', 'PER', False)
+plot('Lebron James', 'advanced', 'PER', True)
+plot('Kawhi Leonard', 'advanced', 'PER', False)
+plot('Kawhi Leonard', 'advanced', 'PER', True)
+plot('Danny Green', 'advanced', 'PER', False)
+
+
+##########################
+
+
 
 players = ['Jimmy Butler', 'Jae Crowder', 'Trevor Ariza', 'Nikola Mirotic']
 for player in players: 
