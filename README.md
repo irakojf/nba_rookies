@@ -73,10 +73,10 @@ For example, calling `team_query( 'NYK, '2013', 'per_game' )` will produce a com
 
 Proper usage of team_query is as below:
 
-	`team_query('NYK', '2013', 'per_game')
-  team_query('NYK', '2014', 'per_game')
-  team_query('NYK', '2015', 'per_game')
-  team_query('NYK', '2016', 'per_game')`
+	`team_query('NYK', '2013', 'per_game')`
+  `team_query('NYK', '2014', 'per_game')`
+  `team_query('NYK', '2015', 'per_game')`
+  `team_query('NYK', '2016', 'per_game')``
 
   !(https://github.com/irakojf/statmamba/blob/master/readme%20imgs/team_query.png?raw=true)
 
@@ -86,7 +86,7 @@ Proper usage of team_query is as below:
 
 The team parameter must be a string containing the abbreviated version of the team name.
 
-  e.g. **'LAL'** or **'NYK'**
+  e.g. `**'LAL'**` or `**'NYK'**`
 
 #### year:
 
@@ -94,7 +94,7 @@ The year parameter is a string and not an integer.
 
 #### div:
 
-Usually, the <div> tag will look like this:
+Usually, the *div* tag will look like this:
 
 	`<div id = 'div_per_game'>`
 
@@ -102,7 +102,7 @@ The scrape function takes the last third of the id value; so for the example abo
 
 Below is a list of generally acceptable div parameters.
 
-| Statistic           | Parameter      | <div id = ' '>   |
+| Statistic           | Parameter      | '<div id = ' '>' |
 | ------------------- | -------------- | ---------------- |
 | Per Game            | per_game       | div_per_game     |
 | Totals              | totals         | div_totals       |
