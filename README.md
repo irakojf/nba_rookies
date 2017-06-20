@@ -23,7 +23,7 @@ Proper usage of scrape is as below:
 
   `scrape(['Michael Jordan', 'Kobe Bryant'], 'advanced')`
 
-  (https://github.com/irakojf/statmamba/blob/master/readme%20imgs/scrape.png?raw=true)
+  ![alt text](https://github.com/irakojf/statmamba/blob/master/readme%20imgs/scrape.png?raw=true "scrape")
 
 ### Parameter Details
 
@@ -78,7 +78,7 @@ Proper usage of team_query is as below:
   `team_query('NYK', '2015', 'per_game')`
   `team_query('NYK', '2016', 'per_game')``
 
-  !(https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/team_query.png)
+  ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/team_query.png "team query")
 
 ### Parameter Details
 
@@ -121,7 +121,7 @@ Proper usage of **scrape** and **plot** is as such:
 	`scrape(['Michael Jordan'], 'advanced')
 	plot('Michael Jordan', 'advanced', 'PER', True)`
 
-  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png)
+  ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png "plot")
 
 ### Parameter Details
 
@@ -147,7 +147,7 @@ You can find a stat's change over time with an average trendline using the funct
 
 Proper usage of the **plot_with_avg** function:
 
-  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png
+  ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png "plot with average")
 
 ### Interpretation using plot_with_avg
 
