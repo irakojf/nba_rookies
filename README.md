@@ -73,10 +73,10 @@ For example, calling `team_query( 'NYK, '2013', 'per_game' )` will produce a com
 
 Proper usage of team_query is as below:
 
-	`team_query('NYK', '2013', 'per_game')`
-  `team_query('NYK', '2014', 'per_game')`
-  `team_query('NYK', '2015', 'per_game')`
-  `team_query('NYK', '2016', 'per_game')``
+	`team_query('NYK', '2013', 'per_game')
+  team_query('NYK', '2014', 'per_game')
+  team_query('NYK', '2015', 'per_game')
+  team_query('NYK', '2016', 'per_game')`
 
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/team_query.png "team query")
 
@@ -86,7 +86,7 @@ Proper usage of team_query is as below:
 
 The team parameter must be a string containing the abbreviated version of the team name.
 
-  e.g. `**'LAL'**` or `**'NYK'**`
+  e.g. `'LAL'` or `'NYK'`
 
 #### year:
 
@@ -158,12 +158,12 @@ For example, calling the **plot_with_avg** function with Isaiah Thomas and DeAnd
 	`plot_with_avg('Isaiah Thomas', 'advanced', 'PER', True)
 	plot_with_avg('DeAndre Jordan, 'advanced', 'PER', True)`
 
-  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/it.png)
-  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/dj.png)
+  ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/it.png "Isaiah Thomas")
+  ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/dj.png "DeAndre Jordan")
 
 The small range of values on the y-axis indicates that the player efficiency ratios of both Isaiah Thomas and DeAndre Jordan have generally remained consistent over time. With the exception of Isaiah Thomas's breakout performance in 2016-17, his PER variance has remained roughly the same.
 
-This is quite consistent with external sources; eDraft.com lists Isaiah Thomas and DeAndre Jordan as two of the most consistent players in the NBA.
+This is quite consistent with external sources; [eDraft.com](http://edraft.com/nba/fantasy-basketball/tools/player-consistency/) lists Isaiah Thomas and DeAndre Jordan as two of the most consistent players in the NBA.
 
 ## Usage with Pandas
 
