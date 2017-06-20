@@ -5,17 +5,19 @@ Written in Python, StatMamba uses Selenium and BeautifulSoup to pull player and 
 
 ## High Level
 1. [Prerequisites](#Prerequisites)
-2. [Scraping player data](#scrape( players, div ))
-3. [Scraping team data](#team_query( team, year, div ))
-4. [Plotting data](#plot( players, div, stat, perchange ))
-5. [Plotting change over time](#plot_with_avg ( players, div, stat, perchange ))
+2. [Scraping player data](#scrape)
+3. [Scraping team data](#teamquery)
+4. [Plotting data](#plot)
+5. [Plotting change over time](#plotavg)
 
+<a name='Prerequisites'></a>
 ### Prerequisites
 
 StatMamba automatically imports BeautifulSoup and Pandas, but you can get Selenium [here](http://www.seleniumhq.org/download/)
 
 To use StatMamba, call any of the following functions in `statmamba.py`.
 
+<a name='scrape'></a>
 ## scrape( players, div )
 
 The **scrape** function takes two parameters: (1) a list of player names and (2) the name of the of table being scraped, represented by the 'id' value in the `<div id=' '>` tag.
@@ -66,6 +68,7 @@ Below is a list of generally acceptable div parameters.
 
 If the table can be found on Basketball Reference, it can most-likely be scraped. For tables outside of this list, you can use Chrome Development Tools to find the `div id` name.
 
+<a name='teamquery'></a>
 ## team_query( team, year, div )
 
 StatMamba can collect aggregate team data for any team for any given time period (in years).
@@ -114,6 +117,7 @@ Below is a list of generally acceptable div parameters.
 
 If the table can be found on Basketball Reference, it can most-likely be scraped. For tables outside of this list, you can use Chrome Development Tools to find the `div id` name.
 
+<a name='plot'></a>
 ## plot( players, div, stat, perchange )
 
 StatMamba can also create line charts for a player's statistical data. The **plot** function produces a line graph of a player's stat over time (e.g. Assists per season).
@@ -145,6 +149,7 @@ A variable representing the type of statistic in question such as 'PER' or 'AST'
 
 A binary variable equal to `True` or `False`. The **perchange** parameter acts a switch; such that if `perchange == True`, the plot function produces a line graph with the stat variable's percent change over time. If `perchange == False`, the plot function simply produces a regular line graph of the stat over time.
 
+<a name='plotavg'></a>
 ## plot_with_avg ( players, div, stat, perchange )
 
 You can find a stat's change over time with an average trendline using the function **plot_with_avg**, which takes the same parameters as the **plot** function.
