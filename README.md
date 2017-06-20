@@ -15,7 +15,9 @@ Written in Python, StatMamba uses Selenium and BeautifulSoup to pull player and 
 
 StatMamba automatically imports BeautifulSoup and Pandas, but you can get Selenium [here](http://www.seleniumhq.org/download/).
 
-To use StatMamba, call any of the following functions in `statmamba.py`.
+StatMamba works best with [Spyder](https://github.com/spyder-ide/spyder).
+
+To use StatMamba, simply open `statmamba.py` in the Spyder IDE and call any of the sample queries.
 
 <a name='scrape'></a>
 ## scrape( players, div )
@@ -193,6 +195,7 @@ StatMamba creates Pandas dataframes for easy manipulation. Most Pandas functions
 * [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 * [Pandas](http://pandas.pydata.org/)
 * [Basketball Reference](http://www.basketball-reference.com/)
+* [Spyder](https://github.com/spyder-ide/spyder)
 
 ## Acknowledgments
 
