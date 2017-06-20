@@ -74,9 +74,6 @@ For example, calling `team_query( 'NYK, '2013', 'per_game' )` will produce a com
 Proper usage of team_query is as below:
 
 	`team_query('NYK', '2013', 'per_game')`
-  `team_query('NYK', '2014', 'per_game')`
-  `team_query('NYK', '2015', 'per_game')`
-  `team_query('NYK', '2016', 'per_game')`
 
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/team_query.png "team query")
 
