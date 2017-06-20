@@ -20,7 +20,9 @@ StatMamba works best with [Spyder](https://github.com/spyder-ide/spyder).
 To use StatMamba, simply open `statmamba.py` in the Spyder IDE and call any of the sample queries.
 
 <a name='scrape'></a>
-## scrape( players, div )
+
+## Scraping Player Data
+### scrape( players, div )
 
 The **scrape** function takes two parameters: (1) a list of player names and (2) the name of the of table being scraped, represented by the 'id' value in the `<div id=' '>` tag.
 
@@ -73,7 +75,8 @@ Below is a list of generally acceptable div parameters.
 If the table can be found on Basketball Reference, it can most-likely be scraped. For tables outside of this list, you can use Chrome Development Tools to find the `div id` name.
 
 <a name='teamquery'></a>
-## team_query( team, year, div )
+## Scraping Team Data
+### team_query( team, year, div )
 
 StatMamba can collect aggregate team data for any team for any given time period (in years).
 
@@ -122,7 +125,8 @@ The scrape function takes the value of the div id, excluding the string 'div_'. 
 If the table can be found on Basketball Reference, it can most-likely be scraped. For tables outside of this list, you can use Chrome Development Tools to find the `div id` name.
 
 <a name='plot'></a>
-## plot( players, div, stat, perchange )
+## Plotting Data
+### plot( players, div, stat, perchange )
 
 StatMamba can also create line charts for a player's statistical data. The **plot** function produces a line graph of a player's stat over time (e.g. Assists per season).
 
@@ -156,7 +160,8 @@ A variable representing the type of statistic in question such as 'PER' or 'AST'
 A binary variable equal to `True` or `False`. The **perchange** parameter acts a switch, such that if `perchange == True`, the plot function produces a line graph with the stat variable's percent change over time. If `perchange == False`, the plot function simply produces a regular line graph of the stat over time.
 
 <a name='plotavg'></a>
-## plot_with_avg ( players, div, stat, perchange )
+## Plotting Change over Time
+### plot_with_avg ( players, div, stat, perchange )
 
 You can find a stat's change over time with an average trendline using the function **plot_with_avg**, which takes the same parameters as the **plot** function.
 
