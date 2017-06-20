@@ -13,7 +13,7 @@ Written in Python, StatMamba uses Selenium and BeautifulSoup to pull player and 
 <a name='Prerequisites'></a>
 ### Prerequisites
 
-StatMamba automatically imports BeautifulSoup and Pandas, but you can get Selenium [here](http://www.seleniumhq.org/download/)
+StatMamba automatically imports BeautifulSoup and Pandas, but you can get Selenium [here](http://www.seleniumhq.org/download/).
 
 To use StatMamba, call any of the following functions in `statmamba.py`.
 
@@ -32,6 +32,8 @@ Proper usage of scrape is as below:
 
   `scrape(['Michael Jordan', 'Kobe Bryant'], 'advanced')`
 
+This code will generate multiple .csv files of Michael Jordan and Kobe Bryant's Per Game statistics.
+
   ![alt text](https://github.com/irakojf/statmamba/blob/master/readme%20imgs/scrape.png?raw=true "scrape")
 
 ### Parameter Details
@@ -48,11 +50,11 @@ For single player queries, put the player as the only element in the list.
 
 #### div:
 
-Usually, the `<div>` tag will look like this:
+On Basketball Reference, stat tables are typically enclosed in `<div>` tags that look like this:
 
 	`<div id = 'div_per_game'>`
 
-The scrape function takes the last third of the id value; so for the example above, a valid parameter would be **'per_game'**.
+The scrape function takes the value of the div id, excluding the string 'div_'. So for the example above, a valid parameter would be **'per_game'**.
 
 Below is a list of generally acceptable div parameters.
 
@@ -77,13 +79,15 @@ The team_query function takes three parameters: (1) the team name, represented b
 
 The function saves the table as a Pandas dataframe or .csv file.
 
-For example, calling `team_query( 'NYK, '2013', 'per_game' )` will produce a comma separated value file with the New York Knicks' per game stats in the following directory path:
+For example, calling `team_query( 'LAL, '2013', 'per_game' )` will produce a comma separated value file with the Los Angeles Lakers' per game stats in the following directory path:
 
-	.../NYK_per_game_exports/NYK2013.csv
+	`.../LAL_per_game_exports/LAL2013.csv`
 
 Proper usage of team_query is as below:
 
 	`team_query('NYK', '2013', 'per_game')`
+
+Repeat the functional call with different parameters for different years or teams.
 
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/team_query.png "team query")
 
@@ -101,13 +105,11 @@ The year parameter is a string and not an integer.
 
 #### div:
 
-Usually, the *div* tag will look like this:
+On Basketball Reference, stat tables are typically enclosed in `<div>` tags that look like this:
 
 	`<div id = 'div_per_game'>`
 
-The scrape function takes the last third of the id value; so for the example above, a valid parameter would be **'per_game'**.
-
-Below is a list of generally acceptable div parameters.
+The scrape function takes the value of the div id, excluding the string 'div_'. So for the example above, a valid parameter would be **'per_game'**.
 
 | Statistic           | Parameter      | `<div id = ' '>` |
 | ------------------- | -------------- | ---------------- |
@@ -129,6 +131,8 @@ Proper usage of **scrape** and **plot** is as such:
 	`scrape(['Michael Jordan'], 'advanced')
 	plot('Michael Jordan', 'advanced', 'PER', True)`
 
+This code generates a .csv file of Michael Jordan's advanced stats, and plots his percent change in PER over time.
+
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png "plot")
 
 ### Parameter Details
@@ -147,7 +151,7 @@ A variable representing the type of statistic in question such as 'PER' or 'AST'
 
 #### perchange:
 
-A binary variable equal to `True` or `False`. The **perchange** parameter acts a switch; such that if `perchange == True`, the plot function produces a line graph with the stat variable's percent change over time. If `perchange == False`, the plot function simply produces a regular line graph of the stat over time.
+A binary variable equal to `True` or `False`. The **perchange** parameter acts a switch, such that if `perchange == True`, the plot function produces a line graph with the stat variable's percent change over time. If `perchange == False`, the plot function simply produces a regular line graph of the stat over time.
 
 <a name='plotavg'></a>
 ## plot_with_avg ( players, div, stat, perchange )
@@ -156,11 +160,16 @@ You can find a stat's change over time with an average trendline using the funct
 
 Proper usage of the **plot_with_avg** function:
 
+  `scrape(['Kobe Bryant'], 'advanced')
+  plot_with_avg('Kobe Bryant', 'advanced', 'PER', True)`
+
+This code produces Kobe Bryant's percent change in PER over time and indicates the average percent change across all seasons.
+
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png "plot with average")
 
 ### Interpretation using plot_with_avg
 
-By the looking at the graph produced by the **plot_with_avg** function, you can get a sense of a player's stat consistency.
+By the looking at the graph produced by the **plot_with_avg** function, you can get a sense of a player's consistency for that particular statistic.
 
 For example, calling the **plot_with_avg** function with Isaiah Thomas and DeAndre Jordan produces the following charts.
 
@@ -170,9 +179,9 @@ For example, calling the **plot_with_avg** function with Isaiah Thomas and DeAnd
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/it.png "Isaiah Thomas")
   ![alt text](https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/dj.png "DeAndre Jordan")
 
-The small range of values on the y-axis indicates that the player efficiency ratios of both Isaiah Thomas and DeAndre Jordan have generally remained consistent over time. With the exception of Isaiah Thomas's breakout performance in 2016-17, his PER variance has remained roughly the same.
+The small range of values on the y-axis indicates that the player efficiency ratios of both Isaiah Thomas and DeAndre Jordan have generally remained consistent over time. With the exception of Isaiah Thomas's breakout performance in 2016-17, his PER variance has changed (improved) at a consistent rate.
 
-This is quite consistent with external sources; [eDraft.com](http://edraft.com/nba/fantasy-basketball/tools/player-consistency/) lists Isaiah Thomas and DeAndre Jordan as two of the most consistent players in the NBA.
+This is observation is corroborated by external sources;  [eDraft.com](http://edraft.com/nba/fantasy-basketball/tools/player-consistency/) lists Isaiah Thomas and DeAndre Jordan as two of the most consistent players in the NBA.
 
 ## Usage with Pandas
 
