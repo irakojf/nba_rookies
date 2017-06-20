@@ -204,5 +204,5 @@ StatMamba creates Pandas dataframes for easy manipulation. Most Pandas functions
 
 ## Acknowledgments
 
-* Thanks to [Basketball Reference](http://www.basketball-reference.com/) for its excellent work on basktball data collection.
+* Thanks to [Basketball Reference](http://www.basketball-reference.com/) for its excellent work on basketball data collection.
 * Thanks to [Scott Rome](http://srome.github.io/) for his excellent article on parsing HTML Tables with Python.
