@@ -1,0 +1,241 @@
+**StatMamba**
+
+StatMamba scrapes and visualizes granular data from Basketball
+Reference.
+
+Written in Python, StatMamba uses Selenium and BeautifulSoup to pull
+player and team data. Users can represent and manipulate data as Pandas
+dataframes or export tables as .csv files.
+
+StatMamba automatically imports BeautifulSoup and Pandas, but you can
+get Selenium [here](http://www.seleniumhq.org/download/).
+
+To use StatMamba**,** call any of the following functions in
+**statmamba.py.** Sample queries are also provided in statmamba.py.
+
+**\
+**
+
+**scrape( players, div ): **
+
+The **scrape** function takes two parameters: (1) a list of player names
+and (2) the name of the of table being scraped, represented by the ‘id’
+value in the &lt;div id=‘ ’&gt; tag.
+
+The function saves the table as a Pandas dataframe or .csv file.
+
+For example, calling **scrape**( \[ ‘Kobe Bryant’ \] , ‘per\_game’ )
+will produce a comma separated value file with Kobe Bryant’s Per Game
+stats in the following directory path:
+
+.../per\_game\_exports/kobe bryant.csv
+
+Proper usage of **scrape** is as below:
+
+scrape(\['Michael Jordan', 'Kobe Bryant'\], 'advanced')
+
+![](media/image1.png){width="6.5in" height="4.0625in"}
+
+**Parameter Details: **
+
+**players:**
+
+Player names must be formatted as strings in the list data structure.
+
+e.g. **\[ ‘Kobe Bryant’, ‘Michael Jordan’, ‘Lebron James’ \] **
+
+For single player queries, put the player as the only element in the
+list.
+
+e.g. **\[ ‘Kobe Bryant’ \]**
+
+**div:**
+
+Usually, the &lt;div&gt; tag will look like this:
+
+&lt;div id = ‘div\_per\_game’&gt;
+
+The **scrape** function takes the last third of the id value; so for the
+example above, a valid parameter would be **‘per\_game’**.
+
+Below is a list of generally acceptable **div** parameters.
+
+**Per Game per\_game**
+
+**Totals totals**
+
+**Per 36 Minutes per\_minute**
+
+**Per 100 Possessions per\_poss**
+
+**Advanced advanced**
+
+**Shooting shooting**
+
+**Play-by-Play advanced\_pbp**
+
+If the table can be found on Basketball Reference, it can most-likely be
+scraped. For tables outside of this list, you can use Chrome Development
+Tools to find the **div id** name.
+
+**\
+**
+
+**team\_query( team, year, div ) **
+
+StatMamba can collect aggregate team data for any team for any given
+time period (in years).
+
+The **team\_query** function takes three parameters: (1) the team name,
+represented by the official team acronym, (2) year, and (3) the name of
+the of table being scraped, represented by the ‘id’ value in the &lt;div
+id=‘ ’&gt; tag.
+
+The function saves the table as a Pandas dataframe or .csv file.
+
+For example, calling **team\_query**( ‘NYK, ‘2013’, ‘per\_game’ ) will
+produce a comma separated value file with the New York Knicks’ per game
+stats in the following directory path:
+
+.../NYK\_per\_game\_exports/NYK2013.csv
+
+Proper usage of **team\_query** is as below:
+
+team\_query('NYK', '2013', 'per\_game')
+
+> team\_query('NYK', '2014', 'per\_game')
+>
+> team\_query('NYK', '2015', 'per\_game')
+>
+> team\_query('NYK', '2016', 'per\_game')
+
+![](media/image2.png){width="6.5in" height="4.0625in"}
+
+**Parameter Details: **
+
+**team: **
+
+The team parameter must be a string containing the abbreviated version
+of the team name.
+
+e.g. **‘LAL’** or **‘NYK’ **
+
+**year: **
+
+The year parameter is a string and not an integer.
+
+**div:**
+
+Usually, the &lt;div&gt; tag will look like this:
+
+&lt;div id = ‘div\_per\_game’&gt;
+
+The **scrape** function takes the last third of the id value; so for the
+example above, a valid parameter would be **‘per\_game’**.
+
+Below is a list of generally acceptable **div** parameters.
+
+**Per Game per\_game**
+
+**Totals totals**
+
+**Advanced advanced**
+
+If the table can be found on Basketball Reference, it can most-likely be
+scraped. For tables outside of this list, you can use Chrome Development
+Tools to find the **div id** name.
+
+**\
+**
+
+**plot( players, div, stat, perchange )**
+
+StatMamba can also create line charts for a player’s statistical data.
+The **plot** function produces a line graph of a player’s stat over time
+(e.g. Assists per season).
+
+**Note:** In order to use **plot**, you must have already called the
+**scrape** function for that particular player. Thus, **plot** must be
+used in conjunction with **scrape** and cannot be called on its own.
+
+Proper usage of **scrape** and **plot** is as such:
+
+scrape(\['Michael Jordan'\], 'advanced')
+
+plot('Michael Jordan', 'advanced', 'PER', True)
+
+![](media/image3.png){width="6.5in" height="4.0625in"}
+
+**Parameter Details: **
+
+**player:**
+
+A player’s first and last name, in string format.
+
+**div: **
+
+Usually, the &lt;div&gt; tag will look like this:
+
+&lt;div id = ‘div\_per\_game’&gt;
+
+The **scrape** function takes the last third of the id value; so for the
+example above, a valid parameter would be **‘per\_game’**.
+
+Below is a list of generally acceptable **div** parameters.
+
+**Per Game per\_game**
+
+**Totals totals**
+
+**Advanced advanced**
+
+**stat:**
+
+A variable representing the type of statistic in question such as ‘PER’
+or ‘AST’, dependent on the type of table being scraped. For example,
+‘PER’ can only be accessed if parameter (2) == ‘advanced’.
+
+**perchange: **
+
+A binary variable equal to True or False. The **perchange** parameter
+acts a switch; such that if **perchange == True**, the **plot** function
+produces a line graph with the **stat** variable’s percent change over
+time. If **perchange == False**, the **plot** function simply produces a
+regular line graph of the **stat** over time.
+
+**\
+**
+
+**plot\_with\_avg ( players, div, stat, perchange )**
+
+You can find a stat's change over time with an average trendline using
+the function **plot\_with\_avg**, which takes the same parameters as the
+**plot** function.
+
+Proper usage of the **plot\_with\_avg** function:
+
+![](media/image4.png){width="6.5in" height="4.0625in"}
+
+By the looking at the graph produced by the **plot\_with\_avg**
+function, you can get a sense of a player’s stat consistency.
+
+For example, calling the **plot\_with\_avg** function with **Isaiah
+Thomas** and **DeAndre Jordan** produces the following charts.
+
+plot\_with\_avg(‘Isaiah Thomas’, 'advanced', 'PER', True)
+
+plot\_with\_avg(‘DeAndre Jordan, 'advanced', 'PER', True)
+
+![](media/image5.png){width="3.25in"
+height="2.235932852143482in"}![](media/image6.png){width="3.25in"
+height="2.235932852143482in"}
+
+The small range of values on the y-axis indicates that the player
+efficiency ratios of both Isaiah Thomas and DeAndre Jordan have
+generally remained consistent over time. With the exception of Isaiah
+Thomas’s breakout performance in 2016-17, his PER variance has remained
+roughly the same.
+
+This is quite consistent with external sources; eDraft.com lists Isaiah
+Thomas and DeAndre Jordan as two of the most consistent players in the
+NBA.
