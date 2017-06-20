@@ -3,6 +3,13 @@ StatMamba scrapes and visualizes granular data from Basketball Reference.
 
 Written in Python, StatMamba uses Selenium and BeautifulSoup to pull player and team data. Users can represent and manipulate data as Pandas dataframes or export tables as .csv files.
 
+## High Level
+1. [Prerequisites](#Prerequisites)
+2. [Scraping player data](#scrape( players, div ))
+3. [Scraping team data](#team_query( team, year, div ))
+4. [Plotting data](#plot( players, div, stat, perchange ))
+5. [Plotting change over time](#plot_with_avg ( players, div, stat, perchange ))
+
 ### Prerequisites
 
 StatMamba automatically imports BeautifulSoup and Pandas, but you can get Selenium [here](http://www.seleniumhq.org/download/)
