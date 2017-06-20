@@ -39,7 +39,7 @@ For single player queries, put the player as the only element in the list.
 
 #### div:
 
-Usually, the <div> tag will look like this:
+Usually, the `<div>` tag will look like this:
 
 	`<div id = 'div_per_game'>`
 
@@ -47,7 +47,7 @@ The scrape function takes the last third of the id value; so for the example abo
 
 Below is a list of generally acceptable div parameters.
 
-  | Statistic           | Parameter      | <div id = ' '>   |
+  | Statistic           | Parameter      | `<div id = ' '>` |
   | ------------------- | -------------- | ---------------- |
   | Per Game            | per_game       | div_per_game     |
   | Totals              | totals         | div_totals       |
@@ -78,7 +78,7 @@ Proper usage of team_query is as below:
   `team_query('NYK', '2015', 'per_game')`
   `team_query('NYK', '2016', 'per_game')``
 
-  !(https://github.com/irakojf/statmamba/blob/master/readme%20imgs/team_query.png?raw=true)
+  !(https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/team_query.png)
 
 ### Parameter Details
 
@@ -102,7 +102,7 @@ The scrape function takes the last third of the id value; so for the example abo
 
 Below is a list of generally acceptable div parameters.
 
-| Statistic           | Parameter      | '<div id = ' '>' |
+| Statistic           | Parameter      | `<div id = ' '>` |
 | ------------------- | -------------- | ---------------- |
 | Per Game            | per_game       | div_per_game     |
 | Totals              | totals         | div_totals       |
@@ -121,7 +121,7 @@ Proper usage of **scrape** and **plot** is as such:
 	`scrape(['Michael Jordan'], 'advanced')
 	plot('Michael Jordan', 'advanced', 'PER', True)`
 
-  !(https://github.com/irakojf/statmamba/blob/master/readme%20imgs/plot.png?raw=true)
+  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png)
 
 ### Parameter Details
 
@@ -147,7 +147,7 @@ You can find a stat's change over time with an average trendline using the funct
 
 Proper usage of the **plot_with_avg** function:
 
-  (https://github.com/irakojf/statmamba/blob/master/readme%20imgs/plot_with_avg.png?raw=true)
+  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/plot.png
 
 ### Interpretation using plot_with_avg
 
@@ -158,8 +158,8 @@ For example, calling the **plot_with_avg** function with Isaiah Thomas and DeAnd
 	`plot_with_avg('Isaiah Thomas', 'advanced', 'PER', True)
 	plot_with_avg('DeAndre Jordan, 'advanced', 'PER', True)`
 
-  (https://github.com/irakojf/statmamba/blob/master/readme%20imgs/it.png?raw=true)
-  (https://github.com/irakojf/statmamba/blob/master/readme%20imgs/dj.png?raw=true)
+  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/it.png)
+  (https://raw.githubusercontent.com/irakojf/statmamba/master/readme%20imgs/dj.png)
 
 The small range of values on the y-axis indicates that the player efficiency ratios of both Isaiah Thomas and DeAndre Jordan have generally remained consistent over time. With the exception of Isaiah Thomas's breakout performance in 2016-17, his PER variance has remained roughly the same.
 
