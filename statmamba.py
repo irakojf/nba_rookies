@@ -6,9 +6,7 @@ from tablePuller import *
 from visualize import *
 import pandas as pd
 
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
 
 
 ### Sample Queries ### 
@@ -28,5 +26,4 @@ for year in range(2010, 2017):
     team_query('NYK', str(year), 'totals')
 
 '''
-
 

@@ -135,6 +135,12 @@ def team_query( team='SAS', year='1990', div_name = 'advanced' ):
     
     return table
 
+def urlscraper(url):
+
+    hp = HTMLTableParser()
+    table = hp.parse_url(url)[0][1] # Grabbing the table from the tuple
+    table.head()
+
 def scrape(players, div):
 ### Takes an array of players
 ### Uses Selenium to open each player's profile page on
