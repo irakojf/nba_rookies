@@ -23,13 +23,10 @@ players = [ 'Michael Jordan', 'Kobe Bryant', 'Lebron James' ]
 
 for player in players: 
     plot(player, 'advanced', 'ORB%', False)
-
+    
+for year in range(2010, 2017):
+    team_query('NYK', str(year), 'totals')
 
 '''
-
-team_query('NYK', '2013', 'per_game')
-team_query('NYK', '2014', 'per_game')
-team_query('NYK', '2015', 'per_game')
-team_query('NYK', '2016', 'per_game')
 
 
