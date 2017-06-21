@@ -115,6 +115,15 @@ def team_query( team='SAS', year='1990', div_name = 'advanced' ):
         
     url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fteams%2F' + team + '%2F' + year + '.html&div=div_' + div_name
     
+    newfolder = str(team + '_exports')
+    if not os.path.exists(newfolder):
+        os.makedirs(newfolder)
+    
+    global path
+    path = newfolder + '/' + team + year + ".csv"
+        
+        
+    
     # Calls the given url with BeautifulSoup
     response = requests.get(url)
     response.text[:100] 

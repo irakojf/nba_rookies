@@ -10,6 +10,7 @@ import pandas as pd
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
+
 ### Sample Queries ### 
 '''
 
@@ -25,11 +26,10 @@ for player in players:
 
 
 '''
-players = ['Isaiah Thomas', 'DeAndre Jordan', 
-           'LeBron James', 'Russell Westbrook', 
-           'Clint Capela']
-scrape(players, 'advanced')
 
-for player in players:
-    plot_with_avg(player, 'advanced', 'PER', True)
+team_query('NYK', '2013', 'per_game')
+team_query('NYK', '2014', 'per_game')
+team_query('NYK', '2015', 'per_game')
+team_query('NYK', '2016', 'per_game')
+
 
