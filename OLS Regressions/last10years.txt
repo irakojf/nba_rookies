@@ -1,0 +1,185 @@
+OLS Regressions for all teams in the league for the last 10 years. 
+From the 2010-11 season to present. 
+
+##############################################################################
+
+STEP 1: Run the OLS Regression for all variables. 
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  LOSE%   R-squared:                       0.986
+Model:                            OLS   Adj. R-squared:                  0.985
+Method:                 Least Squares   F-statistic:                     794.5
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          1.56e-168
+Time:                        00:57:40   Log-Likelihood:                 285.54
+No. Observations:                 210   AIC:                            -537.1
+Df Residuals:                     193   BIC:                            -480.2
+Df Model:                          17                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FG          7.195e-05      0.000      0.353      0.724      -0.000       0.000
+FGA            0.0004    8.6e-05      5.166      0.000       0.000       0.001
+FG%            1.2134      3.957      0.307      0.759      -6.592       9.018
+3P          2.203e-05      0.000      0.077      0.939      -0.001       0.001
+3PA            0.0003      0.000      1.450      0.149   -9.26e-05       0.001
+3P%           -1.1861      1.129     -1.050      0.295      -3.413       1.041
+2P          4.992e-05      0.000      0.144      0.886      -0.001       0.001
+2PA            0.0002      0.000      1.316      0.190   -9.32e-05       0.000
+2P%           -1.2136      3.158     -0.384      0.701      -7.442       5.015
+FT            -0.0005      0.001     -0.924      0.357      -0.001       0.001
+FTA            0.0006      0.000      1.452      0.148      -0.000       0.001
+FT%            0.8844      1.001      0.883      0.378      -1.090       2.859
+ORB           -0.0003   4.15e-05     -7.720      0.000      -0.000      -0.000
+DRB           -0.0002   3.31e-05     -4.949      0.000      -0.000   -9.84e-05
+TRB           -0.0005    3.3e-05    -14.649      0.000      -0.001      -0.000
+AST           -0.0002   4.71e-05     -3.545      0.000      -0.000   -7.41e-05
+STL           -0.0008   8.41e-05     -9.335      0.000      -0.001      -0.001
+BLK        -4.572e-05   8.32e-05     -0.549      0.583      -0.000       0.000
+TOV            0.0007   6.34e-05     11.078      0.000       0.001       0.001
+PF         -3.177e-05   4.95e-05     -0.642      0.522      -0.000    6.58e-05
+PTS           -0.0003      0.000     -2.745      0.007      -0.001    -8.4e-05
+==============================================================================
+Omnibus:                        3.763   Durbin-Watson:                   1.644
+Prob(Omnibus):                  0.152   Jarque-Bera (JB):                3.744
+Skew:                           0.325   Prob(JB):                        0.154
+Kurtosis:                       2.921   Cond. No.                     4.47e+17
+==============================================================================
+
+RESULTS: The only significant variables with an alpha < 0.05 are: 
+FGA, ORB, DRB, TRB, AST, STL, TOV, PTS
+
+##############################################################################
+
+STEP 2: Run the OLS Regression with FGA, ORB, DRB, TRB, AST, STL, TOV, PTS
+
+
+10years
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   WIN%   R-squared:                       0.968
+Model:                            OLS   Adj. R-squared:                  0.967
+Method:                 Least Squares   F-statistic:                     872.6
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          9.54e-148
+Time:                        01:46:16   Log-Likelihood:                 198.85
+No. Observations:                 210   AIC:                            -383.7
+Df Residuals:                     203   BIC:                            -360.3
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FGA           -0.0005   3.56e-05    -14.984      0.000      -0.001      -0.000
+ORB            0.0003   5.35e-05      5.347      0.000       0.000       0.000
+DRB            0.0002   4.39e-05      4.291      0.000       0.000       0.000
+TRB            0.0005   4.13e-05     11.495      0.000       0.000       0.001
+AST            0.0003   5.66e-05      5.243      0.000       0.000       0.000
+STL            0.0008      0.000      7.361      0.000       0.001       0.001
+TOV           -0.0006   7.71e-05     -8.349      0.000      -0.001      -0.000
+PTS            0.0002   2.53e-05      6.844      0.000       0.000       0.000
+==============================================================================
+Omnibus:                        0.860   Durbin-Watson:                   1.303
+Prob(Omnibus):                  0.651   Jarque-Bera (JB):                0.661
+Skew:                           0.132   Prob(JB):                        0.718
+Kurtosis:                       3.076   Cond. No.                     2.90e+16
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 3.31e-23. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
+
+
+STEP 4: Repeat for four years; confirm. 
+
+##############################################################################
+
+4years
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   WIN%   R-squared:                       0.987
+Model:                            OLS   Adj. R-squared:                  0.985
+Method:                 Least Squares   F-statistic:                     452.5
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):           1.36e-88
+Time:                        01:47:18   Log-Likelihood:                 167.02
+No. Observations:                 120   AIC:                            -300.0
+Df Residuals:                     103   BIC:                            -252.7
+Df Model:                          17                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FG         -2.915e-05      0.000     -0.076      0.940      -0.001       0.001
+FGA           -0.0004      0.000     -2.664      0.009      -0.001      -0.000
+FG%           -0.3753      5.984     -0.063      0.950     -12.243      11.492
+3P             0.0002      0.000      0.344      0.732      -0.001       0.001
+3PA           -0.0003      0.000     -1.053      0.295      -0.001       0.000
+3P%            1.0492      2.253      0.466      0.642      -3.418       5.517
+2P            -0.0002      0.001     -0.379      0.706      -0.001       0.001
+2PA           -0.0002      0.000     -0.733      0.465      -0.001       0.000
+2P%            2.2702      4.041      0.562      0.575      -5.744      10.284
+FT          3.362e-05      0.001      0.033      0.974      -0.002       0.002
+FTA           -0.0002      0.001     -0.309      0.758      -0.002       0.001
+FT%            0.1351      2.036      0.066      0.947      -3.904       4.174
+ORB            0.0004   6.16e-05      5.899      0.000       0.000       0.000
+DRB            0.0002   5.41e-05      4.103      0.000       0.000       0.000
+TRB            0.0006   4.83e-05     12.113      0.000       0.000       0.001
+AST            0.0002   6.17e-05      2.807      0.006    5.08e-05       0.000
+STL            0.0009      0.000      7.055      0.000       0.001       0.001
+BLK           -0.0001      0.000     -0.997      0.321      -0.000       0.000
+TOV           -0.0008   8.24e-05     -9.675      0.000      -0.001      -0.001
+PF          7.545e-05   6.57e-05      1.149      0.253   -5.48e-05       0.000
+PTS            0.0001      0.000      0.898      0.372      -0.000       0.000
+==============================================================================
+Omnibus:                        1.630   Durbin-Watson:                   1.671
+Prob(Omnibus):                  0.443   Jarque-Bera (JB):                1.351
+Skew:                          -0.075   Prob(JB):                        0.509
+Kurtosis:                       2.502   Cond. No.                     5.57e+17
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 7.63e-26. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
+
+
+##############################################################################
+
+STEP 4: Repeat for four years; confirm. 
+
+4years
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   WIN%   R-squared:                       0.978
+Model:                            OLS   Adj. R-squared:                  0.977
+Method:                 Least Squares   F-statistic:                     719.2
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):           1.46e-90
+Time:                        01:45:31   Log-Likelihood:                 136.55
+No. Observations:                 120   AIC:                            -259.1
+Df Residuals:                     113   BIC:                            -239.6
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FGA           -0.0005   4.11e-05    -13.086      0.000      -0.001      -0.000
+ORB            0.0002   6.18e-05      2.607      0.010    3.87e-05       0.000
+DRB            0.0003   5.55e-05      5.124      0.000       0.000       0.000
+TRB            0.0004   4.84e-05      9.202      0.000       0.000       0.001
+AST            0.0003   5.97e-05      4.392      0.000       0.000       0.000
+STL            0.0008      0.000      5.508      0.000       0.000       0.001
+TOV           -0.0007   8.39e-05     -8.260      0.000      -0.001      -0.001
+PTS            0.0002   2.85e-05      6.609      0.000       0.000       0.000
+==============================================================================
+Omnibus:                        2.077   Durbin-Watson:                   1.642
+Prob(Omnibus):                  0.354   Jarque-Bera (JB):                2.012
+Skew:                          -0.242   Prob(JB):                        0.366
+Kurtosis:                       2.590   Cond. No.                     4.65e+16
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 7.97e-24. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
+

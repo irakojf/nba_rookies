@@ -107,8 +107,36 @@ class HTMLTableParser():
             
             return df
 
-### Query ### 
-# Sets the URL and scrapes table data
+
+
+
+
+def league_query( year ): 
+        
+    url = 'http://widgets.sports-reference.com/wg.fcgi?css=1&site=bbr&url=%2Fleagues%2FNBA_' + year + '.html&div=div_team-stats-base'
+    newfolder = str( 'league totals')
+    if not os.path.exists(newfolder):
+        os.makedirs(newfolder)
+    
+    global path
+    path = newfolder + '/' + year + ".csv"
+        
+        
+    
+    # Calls the given url with BeautifulSoup
+    response = requests.get(url)
+    response.text[:100] 
+    
+    # Calls the HTMLTableParser with the given url
+    hp = HTMLTableParser()
+    table = hp.parse_url(url)[0][1] 
+    table.head()
+    
+    return table
+
+
+
+
 
 
 def team_query( team='SAS', year='1990', div_name = 'advanced' ): 
@@ -134,6 +162,7 @@ def team_query( team='SAS', year='1990', div_name = 'advanced' ):
     table.head()
     
     return table
+
 
 def urlscraper(url):
 
