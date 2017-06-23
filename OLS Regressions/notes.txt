@@ -1,0 +1,538 @@
+First, I ran a multivariate regression on all the team total stats and WIN%, 
+where X = [FGA, ORB, DRB...] and Y = WIN%. 
+
+The regression produced the following statistics with an alpha of < 0.01. 
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.977
+Model:                            OLS   Adj. R-squared:                  0.976
+Method:                 Least Squares   F-statistic:                     1227.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          2.36e-162
+Time:                        18:45:30   Log-Likelihood:                -686.30
+No. Observations:                 210   AIC:                             1387.
+Df Residuals:                     203   BIC:                             1410.
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FGA           -0.0426      0.002    -17.646      0.000      -0.047      -0.038
+ORB            0.0201      0.004      5.554      0.000       0.013       0.027
+DRB            0.0154      0.003      5.174      0.000       0.010       0.021
+TRB            0.0355      0.003     12.701      0.000       0.030       0.041
+AST            0.0241      0.004      6.283      0.000       0.017       0.032
+STL            0.0622      0.008      8.018      0.000       0.047       0.078
+TOV           -0.0535      0.005    -10.257      0.000      -0.064      -0.043
+PTS            0.0156      0.002      9.112      0.000       0.012       0.019
+==============================================================================
+Omnibus:                        5.082   Durbin-Watson:                   1.660
+Prob(Omnibus):                  0.079   Jarque-Bera (JB):                5.177
+Skew:                          -0.378   Prob(JB):                       0.0751
+Kurtosis:                       2.862   Cond. No.                     2.90e+16
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 3.31e-23. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
+
+
+However, these variables produced extremely high VIFs, which indiciated high
+multicollinaerity. 
+
+
+# Though these variables: 'FGA', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'TOV', 'PTS'
+# were highly significant, with a |t| > prb ~ 0.000, 
+# we found that these variables are highly colinear. VIF values are much higher than one. 
+#[1513.2273856120787, inf, inf, inf, 224.31973181679464, 145.49554440420221, 184.10781155657105, 1078.1143533417589]
+
+VIF Values: 
+
+[1291.0734267044984, inf, inf, inf, 229.12470540057188, 115.59869684175766, 
+ 181.76384597168808, 959.14138698445618]
+
+where inf means 'infinity'. 
+
+To address multicollinearity, I solved for the structure constants. 
+
+          Y-Hat       FGA
+Y-Hat  1.000000  0.349768
+FGA    0.349768  1.000000 
+           Y-Hat       ORB
+Y-Hat  1.000000  0.026986
+ORB    0.026986  1.000000 
+           Y-Hat       DRB
+Y-Hat  1.000000  0.590926
+DRB    0.590926  1.000000 
+        Y-Hat    TRB
+Y-Hat  1.000  0.508
+TRB    0.508  1.000 
+          Y-Hat      AST
+Y-Hat  1.00000  0.60119
+AST    0.60119  1.00000 
+           Y-Hat       STL
+Y-Hat  1.000000  0.433472
+STL    0.433472  1.000000 
+          Y-Hat      TOV
+Y-Hat  1.00000  0.11068
+TOV    0.11068  1.00000 
+           Y-Hat       PTS
+Y-Hat  1.000000  0.631064
+PTS    0.631064  1.000000 
+
+   %variance   strcoef variable
+0   0.122338  0.349768      FGA
+1   0.000728  0.026986      ORB
+2   0.349194  0.590926      DRB
+3   0.258064  0.508000      TRB
+4   0.361429  0.601190      AST
+5   0.187898  0.433472      STL
+6   0.012250  0.110680      TOV
+7   0.398242  0.631064      PTS
+
+
+ORB and TOV don't have particularly high structure coefficients. As such, they 
+can be eliminated from the next multivariate regression. 
+
+I repeated the previous steps, with all indepdendent (X) variables except for ORB. 
+
+
+10years
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.977
+Model:                            OLS   Adj. R-squared:                  0.976
+Method:                 Least Squares   F-statistic:                     1227.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          2.36e-162
+Time:                        21:59:34   Log-Likelihood:                -686.30
+No. Observations:                 210   AIC:                             1387.
+Df Residuals:                     203   BIC:                             1410.
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FGA           -0.0426      0.002    -17.646      0.000      -0.047      -0.038
+DRB           -0.0048      0.006     -0.794      0.428      -0.017       0.007
+TRB            0.0556      0.006      9.671      0.000       0.044       0.067
+AST            0.0241      0.004      6.283      0.000       0.017       0.032
+STL            0.0622      0.008      8.018      0.000       0.047       0.078
+TOV           -0.0535      0.005    -10.257      0.000      -0.064      -0.043
+PTS            0.0156      0.002      9.112      0.000       0.012       0.019
+==============================================================================
+Omnibus:                        5.082   Durbin-Watson:                   1.660
+Prob(Omnibus):                  0.079   Jarque-Bera (JB):                5.177
+Skew:                          -0.378   Prob(JB):                       0.0751
+Kurtosis:                       2.862   Cond. No.                         215.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+          Y-Hat       FGA
+Y-Hat  1.000000  0.348361
+FGA    0.348361  1.000000 
+           Y-Hat       DRB
+Y-Hat  1.000000  0.589518
+DRB    0.589518  1.000000 
+          Y-Hat      TRB
+Y-Hat  1.00000  0.50663
+TRB    0.50663  1.00000 
+           Y-Hat       AST
+Y-Hat  1.000000  0.600418
+AST    0.600418  1.000000 
+           Y-Hat       STL
+Y-Hat  1.000000  0.433216
+STL    0.433216  1.000000 
+           Y-Hat       TOV
+Y-Hat  1.000000  0.109671
+TOV    0.109671  1.000000 
+           Y-Hat       PTS
+Y-Hat  1.000000  0.629975
+PTS    0.629975  1.000000 
+
+   %variance   strcoef variable
+0   0.121355  0.348361      FGA
+1   0.347531  0.589518      DRB
+2   0.256674  0.506630      TRB
+3   0.360502  0.600418      AST
+4   0.187676  0.433216      STL
+5   0.012028  0.109671      TOV
+6   0.396869  0.629975      PTS
+
+
+The regression suggests that DRB is not a significant predictive variable. 
+However, the structure coefficient^2 is equal to .349, which seems to 
+suggest that it does explain some of the variance. 
+
+
+The structure coefficient for TOV decreases even more. 
+It's contribution to R-squared becomes 0.012. 
+
+Let's try again without DRB.
+
+10years
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.977
+Model:                            OLS   Adj. R-squared:                  0.976
+Method:                 Least Squares   F-statistic:                     1434.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          8.16e-164
+Time:                        22:03:38   Log-Likelihood:                -686.63
+No. Observations:                 210   AIC:                             1385.
+Df Residuals:                     204   BIC:                             1405.
+Df Model:                           6                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FGA           -0.0421      0.002    -18.006      0.000      -0.047      -0.037
+TRB            0.0524      0.004     12.945      0.000       0.044       0.060
+AST            0.0232      0.004      6.342      0.000       0.016       0.030
+STL            0.0632      0.008      8.262      0.000       0.048       0.078
+TOV           -0.0528      0.005    -10.285      0.000      -0.063      -0.043
+PTS            0.0151      0.002      9.491      0.000       0.012       0.018
+==============================================================================
+Omnibus:                        4.810   Durbin-Watson:                   1.628
+Prob(Omnibus):                  0.090   Jarque-Bera (JB):                4.910
+Skew:                          -0.365   Prob(JB):                       0.0859
+Kurtosis:                       2.834   Cond. No.                         209.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+          Y-Hat       FGA
+Y-Hat  1.000000  0.352358
+FGA    0.352358  1.000000 
+           Y-Hat       TRB
+Y-Hat  1.000000  0.510297
+TRB    0.510297  1.000000 
+           Y-Hat       AST
+Y-Hat  1.000000  0.602889
+AST    0.602889  1.000000 
+           Y-Hat       STL
+Y-Hat  1.000000  0.434942
+STL    0.434942  1.000000 
+           Y-Hat       TOV
+Y-Hat  1.000000  0.112466
+TOV    0.112466  1.000000 
+          Y-Hat      PTS
+Y-Hat  1.00000  0.63318
+PTS    0.63318  1.00000 
+
+   %variance   strcoef variable
+0   0.124156  0.352358      FGA
+1   0.260403  0.510297      TRB
+2   0.363475  0.602889      AST
+3   0.189175  0.434942      STL
+4   0.012649  0.112466      TOV
+5   0.400917  0.633180      PTS
+
+This creates a very robust model, but it seems like the TOV beta is 
+overrepresented, especially since the structure coefficent for TOV only 
+accounts for approximately 1% of the total variance. 
+
+Let's try the model without turnovers. 
+
+10years
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.965
+Model:                            OLS   Adj. R-squared:                  0.964
+Method:                 Least Squares   F-statistic:                     1125.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          7.21e-147
+Time:                        22:08:26   Log-Likelihood:                -730.49
+No. Observations:                 210   AIC:                             1471.
+Df Residuals:                     205   BIC:                             1488.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+FGA           -0.0424      0.003    -14.755      0.000      -0.048      -0.037
+TRB            0.0377      0.005      8.098      0.000       0.029       0.047
+AST            0.0219      0.004      4.893      0.000       0.013       0.031
+STL            0.0333      0.009      3.831      0.000       0.016       0.051
+PTS            0.0166      0.002      8.523      0.000       0.013       0.020
+==============================================================================
+Omnibus:                        6.160   Durbin-Watson:                   2.167
+Prob(Omnibus):                  0.046   Jarque-Bera (JB):                6.332
+Skew:                          -0.419   Prob(JB):                       0.0422
+Kurtosis:                       2.859   Cond. No.                         182.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[1215.0781467799666, 843.84265283172442, 208.41546427211961, 96.338434772307224, 822.88151777765268]
+          Y-Hat       FGA
+Y-Hat  1.000000  0.298819
+FGA    0.298819  1.000000 
+           Y-Hat       TRB
+Y-Hat  1.000000  0.480571
+TRB    0.480571  1.000000 
+           Y-Hat       AST
+Y-Hat  1.000000  0.607492
+AST    0.607492  1.000000 
+           Y-Hat       STL
+Y-Hat  1.000000  0.427155
+STL    0.427155  1.000000 
+           Y-Hat       PTS
+Y-Hat  1.000000  0.626577
+PTS    0.626577  1.000000 
+
+   %variance   strcoef variable
+0   0.089293  0.298819      FGA
+1   0.230948  0.480571      TRB
+2   0.369047  0.607492      AST
+3   0.182461  0.427155      STL
+4   0.392599  0.626577      PTS
+
+We're left with two equations formed by two sets of variables: 
+
+A = [FGA, TRB, AST, STL, PTS, TOV]          Sum of Errors: 1074.1931
+B = [FGA, TRB, AST, STL, PTS]               Sum of Errors: 1332.449
+
+Thus, we should choose variable set A. 
+
+
+
+
+We'll repeat this procedure for the League General Four stats. 
+
+total
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.989
+Model:                            OLS   Adj. R-squared:                  0.989
+Method:                 Least Squares   F-statistic:                     2294.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          9.46e-194
+Time:                        22:45:24   Log-Likelihood:                -607.37
+No. Observations:                 210   AIC:                             1231.
+Df Residuals:                     202   BIC:                             1258.
+Df Model:                           8                                         
+Covariance Type:            nonrobust                                         
+================================================================================
+                   coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------
+EFG%             4.1049      0.120     34.116      0.000       3.868       4.342
+FTA RATE        49.0099     10.793      4.541      0.000      27.729      70.291
+TOV%            -3.4046      0.323    -10.539      0.000      -4.042      -2.768
+OREB%            1.2040      0.124      9.678      0.000       0.959       1.449
+OPP EFG%        -3.0994      0.132    -23.429      0.000      -3.360      -2.839
+OPP FTA RATE   -43.2877     11.992     -3.610      0.000     -66.933     -19.643
+OPP TOV%         2.4734      0.298      8.306      0.000       1.886       3.061
+OPP OREB%       -1.1304      0.185     -6.116      0.000      -1.495      -0.766
+==============================================================================
+Omnibus:                        3.215   Durbin-Watson:                   1.422
+Prob(Omnibus):                  0.200   Jarque-Bera (JB):                2.928
+Skew:                          -0.197   Prob(JB):                        0.231
+Kurtosis:                       3.423   Cond. No.                     3.26e+03
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 3.26e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+[383.75145506883683, 97.37282122771677, 246.14959587788496, 106.79628281447307, 463.39229787342072, 119.95459518363269, 209.50026599111183, 234.99278250427116]
+          Y-Hat      EFG%
+Y-Hat  1.000000  0.784274
+EFG%   0.784274  1.000000 
+              Y-Hat  FTA RATE
+Y-Hat     1.000000  0.187274
+FTA RATE  0.187274  1.000000 
+           Y-Hat      TOV%
+Y-Hat  1.000000 -0.264289
+TOV%  -0.264289  1.000000 
+           Y-Hat     OREB%
+Y-Hat  1.000000 -0.061373
+OREB% -0.061373  1.000000 
+              Y-Hat  OPP EFG%
+Y-Hat     1.000000 -0.557617
+OPP EFG% -0.557617  1.000000 
+                 Y-Hat  OPP FTA RATE
+Y-Hat         1.00000      -0.26989
+OPP FTA RATE -0.26989       1.00000 
+              Y-Hat  OPP TOV%
+Y-Hat     1.000000  0.077846
+OPP TOV%  0.077846  1.000000 
+              Y-Hat  OPP OREB%
+Y-Hat      1.00000   -0.28621
+OPP OREB% -0.28621    1.00000 
+
+   %variance   strcoef      variable
+0   0.615086  0.784274          EFG%
+1   0.035072  0.187274      FTA RATE
+2   0.069849 -0.264289          TOV%
+3   0.003767 -0.061373         OREB%
+4   0.310937 -0.557617      OPP EFG%
+5   0.072841 -0.269890  OPP FTA RATE
+6   0.006060  0.077846      OPP TOV%
+7   0.081916 -0.286210     OPP OREB%
+
+Remove: OREB%, OPP TOV%
+
+
+total
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.981
+Model:                            OLS   Adj. R-squared:                  0.980
+Method:                 Least Squares   F-statistic:                     1729.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          6.46e-172
+Time:                        22:48:42   Log-Likelihood:                -667.41
+No. Observations:                 210   AIC:                             1347.
+Df Residuals:                     204   BIC:                             1367.
+Df Model:                           6                                         
+Covariance Type:            nonrobust                                         
+================================================================================
+                   coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------
+EFG%             4.1725      0.152     27.460      0.000       3.873       4.472
+FTA RATE        63.9829     13.826      4.628      0.000      36.723      91.243
+TOV%            -2.1478      0.404     -5.318      0.000      -2.944      -1.351
+OPP EFG%        -2.9390      0.173    -16.965      0.000      -3.281      -2.597
+OPP FTA RATE   -17.5915     15.402     -1.142      0.255     -47.958      12.775
+OPP OREB%       -0.1114      0.215     -0.519      0.604      -0.534       0.312
+==============================================================================
+Omnibus:                       10.305   Durbin-Watson:                   1.502
+Prob(Omnibus):                  0.006   Jarque-Bera (JB):               15.278
+Skew:                           0.299   Prob(JB):                     0.000481
+Kurtosis:                       4.179   Cond. No.                     2.94e+03
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.94e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+[348.88665331892247, 91.094147803540906, 219.35841352885828, 453.03243924479318, 112.8049583462541, 180.48409103316419]
+          Y-Hat      EFG%
+Y-Hat  1.000000  0.876389
+EFG%   0.876389  1.000000 
+              Y-Hat  FTA RATE
+Y-Hat     1.000000  0.216772
+FTA RATE  0.216772  1.000000 
+           Y-Hat      TOV%
+Y-Hat  1.000000 -0.245312
+TOV%  -0.245312  1.000000 
+              Y-Hat  OPP EFG%
+Y-Hat     1.000000 -0.517767
+OPP EFG% -0.517767  1.000000 
+                  Y-Hat  OPP FTA RATE
+Y-Hat         1.000000     -0.260009
+OPP FTA RATE -0.260009      1.000000 
+               Y-Hat  OPP OREB%
+Y-Hat      1.000000  -0.272033
+OPP OREB% -0.272033   1.000000 
+
+   %variance   strcoef      variable
+0   0.615086  0.784274          EFG%
+1   0.035072  0.187274      FTA RATE
+2   0.069849 -0.264289          TOV%
+3   0.310937 -0.557617      OPP EFG%
+4   0.072841 -0.269890  OPP FTA RATE
+5   0.081916 -0.286210     OPP OREB%
+
+Remove OPP OREB
+
+total
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.981
+Model:                            OLS   Adj. R-squared:                  0.980
+Method:                 Least Squares   F-statistic:                     2082.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          1.54e-173
+Time:                        23:03:53   Log-Likelihood:                -667.55
+No. Observations:                 210   AIC:                             1345.
+Df Residuals:                     205   BIC:                             1362.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+================================================================================
+                   coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------
+EFG%             4.1730      0.152     27.513      0.000       3.874       4.472
+FTA RATE        64.0130     13.801      4.638      0.000      36.803      91.223
+TOV%            -2.2364      0.365     -6.121      0.000      -2.957      -1.516
+OPP EFG%        -2.9597      0.168    -17.586      0.000      -3.291      -2.628
+OPP FTA RATE   -19.4018     14.975     -1.296      0.197     -48.927      10.123
+==============================================================================
+Omnibus:                        9.871   Durbin-Watson:                   1.509
+Prob(Omnibus):                  0.007   Jarque-Bera (JB):               14.614
+Skew:                           0.284   Prob(JB):                     0.000671
+Kurtosis:                       4.161   Cond. No.                     2.71e+03
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.71e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+[348.8749762831435, 91.092547825014236, 180.12512556156344, 429.06547959033782, 107.02202949753568]
+          Y-Hat      EFG%
+Y-Hat  1.000000  0.874848
+EFG%   0.874848  1.000000 
+              Y-Hat  FTA RATE
+Y-Hat     1.000000  0.216144
+FTA RATE  0.216144  1.000000 
+          Y-Hat     TOV%
+Y-Hat  1.00000 -0.24653
+TOV%  -0.24653  1.00000 
+              Y-Hat  OPP EFG%
+Y-Hat     1.000000 -0.520352
+OPP EFG% -0.520352  1.000000 
+                  Y-Hat  OPP FTA RATE
+Y-Hat         1.000000     -0.260928
+OPP FTA RATE -0.260928      1.000000 
+
+   %variance   strcoef      variable
+0   0.765359  0.874848          EFG%
+1   0.046718  0.216144      FTA RATE
+2   0.060777 -0.246530          TOV%
+3   0.270766 -0.520352      OPP EFG%
+4   0.068083 -0.260928  OPP FTA RATE
+
+Remove OPP FTA RATE and FTA RATE, because it overstates the coefficient.
+
+total
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      W   R-squared:                       0.979
+Model:                            OLS   Adj. R-squared:                  0.978
+Method:                 Least Squares   F-statistic:                     3153.
+Date:                Thu, 22 Jun 2017   Prob (F-statistic):          1.95e-172
+Time:                        23:10:25   Log-Likelihood:                -678.41
+No. Observations:                 210   AIC:                             1363.
+Df Residuals:                     207   BIC:                             1373.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+EFG%           4.3443      0.154     28.148      0.000       4.040       4.649
+TOV%          -1.8429      0.353     -5.222      0.000      -2.539      -1.147
+OPP EFG%      -2.9989      0.164    -18.248      0.000      -3.323      -2.675
+==============================================================================
+Omnibus:                        8.494   Durbin-Watson:                   1.483
+Prob(Omnibus):                  0.014   Jarque-Bera (JB):               13.749
+Skew:                           0.184   Prob(JB):                      0.00103
+Kurtosis:                       4.198   Cond. No.                         61.4
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[328.93872254156588, 153.06044542681985, 372.56869438417613]
+          Y-Hat      EFG%
+Y-Hat  1.000000  0.885591
+EFG%   0.885591  1.000000 
+           Y-Hat      TOV%
+Y-Hat  1.000000 -0.251491
+TOV%  -0.251491  1.000000 
+              Y-Hat  OPP EFG%
+Y-Hat     1.000000 -0.530792
+OPP EFG% -0.530792  1.000000 
+
+   %variance   strcoef  variable
+0   0.784271  0.885591      EFG%
+1   0.063248 -0.251491      TOV%
+2   0.281740 -0.530792  OPP EFG%
+
+Significant predictive varibles: EFG%, OPP EFG%, TOV%
+

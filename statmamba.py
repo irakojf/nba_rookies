@@ -37,10 +37,45 @@ def makeframe(path):
     return df
 
 
-years = ['2010-11', '2011-12', '2012-13', '2013-14', '2014-15', 
-         '2015-16', '2016-17']
 
-#for year in years: 
+
+
+'''
+#Scrape advanced data for each team from 2013 to 2017.
+yrs = ['2013', '2014', '2015', '2016', '2017']
+for year in yrs: 
+    league_misc(year)
+
+#Join scraped data with older data (advanced plus basic stats combined)
+#Export into a new folder for the past five seasons. 
+yrs = ['2013', '2014', '2015', '2016', '2017']
+for year in yrs: 
+    df1 =  df.from_csv(dir_path + '/league misc/' + year + '.csv')
+    df2 = df.from_csv(dir_path + '/League Totals Wins/' + year + 'a.csv')
+    result = pd.concat([df1, df2], axis=1)
+    
+    newfolder = str( 'league all stats')
+    if not os.path.exists(newfolder):
+        os.makedirs(newfolder)
+    
+    global path
+    path = newfolder + '/' + year + ".csv"
+    
+    result.to_csv(path)
+    
+    
+### Merge all tables from every year into one csv file.
+a = df.from_csv(dir_path + '/league all stats/2013.csv')
+b = df.from_csv(dir_path + '/league all stats/2014.csv')
+c = df.from_csv(dir_path + '/league all stats/2015.csv')
+d = df.from_csv(dir_path + '/league all stats/2016.csv')
+e = df.from_csv(dir_path + '/league all stats/2017.csv')
+result = a.append([b, c, d, e])
+result.to_csv(dir_path + '/league all stats/total.csv')
+
+'''
+    
+    
 '''        
 year = 'total'
 print('\n' + year)
@@ -85,40 +120,83 @@ print(vif)
 """
 
 
-year = '4years'
+### Set everything up and convert everything into a number
+year = 'total'
 print('\n' + year)
-df = makeframe(str(dir_path + '/League Totals Wins/' + year + '.csv'))
-#print(df)
-x = df[['FG', 'FGA', 'FG%','3P', '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']]
-#x = df[['FGA', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'TOV', 'PTS']]
-y = df[['Team', 'WIN%']]
-y['LOSE%'] = 1 - df[['WIN%']]
-y2 = df[['WIN%']]
-y1 = y[['LOSE%']]
-result = sm.OLS(y2, x).fit()
+df = makeframe(str(dir_path + '/league all stats/' + year + '.csv'))
+df1 = df.drop('Team', axis=1)
+df1 = df1.convert_objects(convert_numeric=True)
+y = df[['W']] 
+
+xvar = [
+        '3PA', 
+        '2PA', 
+        'ORB', 
+        'DRB', 
+        'AST',
+        'ORtg',
+        'DRtg',
+        ]
+x1 = df1[xvar]
+
+# Run the Regression
+result = sm.OLS(y, x1).fit()
 print(result.summary())
+
+
+#Calculate the VIF
+#vif = [variance_inflation_factor(x.values, i) for i in range(x.shape[1])]
+#print(vif)
+
+
+df1['Beta*3PA'] = 35.9594  * df1[['3PA']]
+df1['Beta*2PA'] = -20.0278 * df1[['2PA']]
+df1['Beta*ORB'] = 35.9594  * df1[['ORB']]
+df1['Beta*DRB'] = -20.0278 * df1[['DRB']]
+df1['Beta*AST'] = -20.0278 * df1[['AST']]
+df1['Beta*ORtg'] = 2.4991 * df1[['ORtg']]
+df1['Beta*DRtg'] = -2.1900 * df1[['DRtg']] 
+
+df1['Y-Hat'] = (
+        df1['3PA'] + 
+        df1['2PA'] + 
+        df1['ORB'] + 
+        df1['DRB'] + 
+        df1['AST'] +
+        df1['ORtg'] + 
+        df1['DRtg'] 
+        )
+
+# Run correlation between y-hat and prediction variables
+for x in xvar: 
+    a = df1[['Y-Hat', x]].corr()    
+    print(a)
+
+b = [    
+#    0.0,
+#    0.0,
+#    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.734628,
+    0.599427,
+    0.556944,
+    0.504105
+    ]
+
+c = []
+for b1 in b: 
+    c.append(b1 * b1)
+
+corr = pd.DataFrame(
+    {'x-var': xvar,
+     'strcoef': b,
+     'strcoef^2': c
+    })
+
+print('\n')
+print(corr)
 
 #k = df.loc[y['TEAM'] == 'New York Knicks']
 #print(k)
-
-print(x)
-
-vif = [variance_inflation_factor(x.values, i) for i in range(x.shape[1])]
-print(vif)
-
-
-# Though these variables: 'FGA', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'TOV', 'PTS'
-# were highly significant, with a |t| > prb ~ 0.000, 
-# we found that these variables are highly colinear. VIF values are much higher than one. 
-#[1513.2273856120787, inf, inf, inf, 224.31973181679464, 145.49554440420221, 184.10781155657105, 1078.1143533417589]
-
-
-
-
-
-
-print('\n')
-print('\n')
-print('\n')
-print('\n')
-print('\n')
