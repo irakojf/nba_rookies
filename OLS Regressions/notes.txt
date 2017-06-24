@@ -536,3 +536,25 @@ OPP EFG% -0.530792  1.000000
 
 Significant predictive varibles: EFG%, OPP EFG%, TOV%
 
+
+
+2010-11: 
+    LOSE% = -0.0452 EFG% + 0.0383 TOV% + 0.0513 OPP EFG% - 0.0151 OREB% 
+
+2011-12: 
+    LOSE% = -0.0400 EFG% + 0.0599 OPP EFG% - 0.0175 OREB% 
+    
+2012-13: 
+    LOSE% = -0.0413 EFG% + 0.0578 OPP EFG% - 0.0120 OREB% 
+    
+2013-14: 
+    LOSE% = -0.00451 EFG% + 0.0551 OPP EFG%
+
+2014-15: 
+    LOSE% = -0.0484 EFG% + 0.0585 OPP EFG%
+    
+2015-16: 
+    LOSE% = -0.0462 EFG% + 0.0656 TOV% + 0.0460 OPP EFG% - 0.0188 OREB%  
+    
+2016-17:
+    LOSE% = -0.0452 EFG% + 0.0383 TOV% + 0.0513 OPP EFG% - 0.0151 OREB%

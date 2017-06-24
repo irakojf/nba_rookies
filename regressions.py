@@ -1,4 +1,4 @@
-# statmamba.py
+# regressions.py
 
 ###
 
@@ -12,31 +12,7 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-
-### Sample Queries ### 
-'''
-
-scrape(['Michael Jordan', 'Kobe Bryant'], 'advanced')
-plot('Lebron James', 'advanced', 'ORB%', False)
-team_query('NYK', '2013', 'per_game')
-
-players = [ 'Michael Jordan', 'Kobe Bryant', 'Lebron James' ]
-#scrape(players, 'advanced')
-
-for player in players: 
-    plot(player, 'advanced', 'ORB%', False)
-    
-for year in range(2010, 2017):
-    team_query('NYK', str(year), 'totals')
-
-'''
-
-
-
-
-
-
-year = 'nyk2016'
+year = 'lal2017'
 print('\n' + year)
 df1 = makeframe(str(dir_path + '/gamelogs/' + year + '.csv'))
 df1 = df1.convert_objects(convert_numeric=True)

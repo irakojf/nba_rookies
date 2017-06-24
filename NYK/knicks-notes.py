@@ -1,3 +1,5 @@
+How the Knicks played in 2017. 
+
 # statmamba.py
 
 ###
@@ -31,59 +33,10 @@ for year in range(2010, 2017):
 
 '''
 
-
-
-
-
-
-year = 'nyk2016'
-print('\n' + year)
-df1 = makeframe(str(dir_path + '/gamelogs/' + year + '.csv'))
-df1 = df1.convert_objects(convert_numeric=True)
-df1['2PA'] = df1['FGA'] - df1['3PA']
-df1['DRB'] = df1['TRB'] - df1['ORB']
-df1['3P%'] = df1['3P'] / df1['3PA']
-df1['2P%'] = (df1['FG'] - df1['3P']) / df1['2PA']
-
-df1['Y-Hat'] = (-0.0231 * df1['3PA'] +
-               -0.0295 * df1['2PA'] + 
-               0.0334 * df1['ORB'] + 
-               0.0485 * df1['DRB'] + 
-               0.0401 * df1['AST'])
-
-#df1['Y-Hat'] = abs(df1['Y-Hat'])
-
-for cols in df1.columns.tolist()[1:]:
-    df2 = df1.loc[df1['Y-Hat'] > 0.55] # If Y-Hat is greater than .55, then it should predict a win. 
-
-df3 = df2[['Y-Hat', 'W/L']]
-print(df3)
-
-print('\nPredicted Wins')
-yhat = ((df3['Y-Hat'] >= 0.55).sum())
-print(yhat)
-
-
-print('\nOverestimations')
-overest = ((df3['W/L'] == 'L').sum())
-print(overest)
-
-for cols in df1.columns.tolist()[1:]:
-    df2 = df1.loc[df1['Y-Hat'] < 0] # If Y-Hat is negative, then it should predict a loss. 
-
-df3 = df2[['Y-Hat', 'W/L']]
-print(df3)
-
-print('\nUnderestimations')
-underest = ((df3['W/L'] == 'W').sum())
-print(underest)
-
-print('\nTotal Errors')
-print(overest + underest)
-
-
-
-
+def makeframe(path): 
+    df = pd.read_csv(path)
+    df = df.fillna(0.0) # replaces all NaN with 0.0
+    return df
 
 '''
 #Scrape advanced data for each team from 2013 to 2017.
@@ -141,6 +94,7 @@ print(vif)
 ### Regression Formulas ###
 """
 
+"""
 ### Set everything up and convert everything into a number
 year = '2017'
 print('\n' + year)
@@ -231,7 +185,3 @@ corr = pd.DataFrame(
     
 print('\n')
 print(corr)
-print('\n')
-
-
-"""
