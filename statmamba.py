@@ -31,7 +31,10 @@ for year in range(2010, 2017):
 
 '''
 
-
+def makeframe(path): 
+    df = pd.read_csv(path)
+    df = df.fillna(0.0) # replaces all NaN with 0.0
+    return df
 
 
 

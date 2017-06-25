@@ -12,6 +12,13 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+def makeframe(path): 
+    df = pd.read_csv(path)
+    df = df.fillna(0.0) # replaces all NaN with 0.0
+    return df
+
+
+
 year = 'lal2017'
 print('\n' + year)
 df1 = makeframe(str(dir_path + '/gamelogs/' + year + '.csv'))
